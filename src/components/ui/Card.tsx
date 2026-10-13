@@ -10,7 +10,7 @@ const cardVariants = cva("bg-card text-fg shadow-card pad-card", {
 });
 
 export interface CardProps extends HTMLAttributes<HTMLDivElement>, VariantProps<typeof cardVariants> {
-  as?: "div" | "article" | "section";
+  as?: "div" | "article" | "section" | "aside";
 }
 
 /** White tile with a soft shadow. `lg` is the hero/product card from reference 1. */

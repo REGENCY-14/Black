@@ -7,6 +7,10 @@ export const businessRules = {
     /** Unpaid balance policy (Q5-A): cancelled after this many days, deposit kept. */
     unpaidCancelAfterDays: 14,
   },
+  payment: {
+    /** How long the UI waits for a customer to approve a MoMo prompt before offering retry. */
+    momoApprovalTimeoutSeconds: 90,
+  },
   timezone: "Africa/Accra",
   currency: "GHS",
   /** Price includes shipping from China and duty (Q1-A). */

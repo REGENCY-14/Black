@@ -27,3 +27,12 @@
 - Browser orders persist in localStorage key `mock-db-v1`. Clear it to reset.
 - Server pages read data through `src/lib/catalog.ts` (`use cache`); client screens use hooks in `src/hooks/api.ts`.
 - With Cache Components, `new Date()`/`Math.random()` in server components must be inside `use cache` or a client component.
+
+# Checkout notes
+
+- Cart lines group by batch (`lib/checkout.ts`): one order per arrival window. Deposit is rounded per order, so "pay now" is the sum of per-order deposits.
+- `PaymentFlow` (components/store) drives any payment: starting, waiting for MoMo approval (90s timeout from `businessRules.payment`), processing, failed, success. Reuse it for `/pay` and Track.
+- After a failed payment the created orders are reused on retry (no duplicate orders). Orders stay unpaid (no history) until a payment succeeds.
+- The confirmation page reads `sessionStorage["last-checkout"]` (`lib/lastCheckout.ts`).
+- `Field` clones its single child to add id/aria props, so wrap any non-native control in a component that forwards them (see `AreaSelect`).
+- Cache Components: never call `new Date()` as a default parameter on a path that runs during prerender; evaluate it lazily.

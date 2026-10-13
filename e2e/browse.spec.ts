@@ -120,7 +120,8 @@ test.describe("product", () => {
     await page.getByRole("link", { name: /remote control car/i }).click(); // tap 2
     await page.getByRole("button", { name: "Preorder" }).click(); // tap 3
     await expect(page).toHaveURL(/\/cart$/);
-    await expect(page.getByTestId("cart-lines")).toContainText("Remote control car");
+    await expect(page.getByRole("heading", { name: "Your cart" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Remote control car" })).toBeVisible();
     await expect(page.getByRole("link", { name: "Cart, 1 item" })).toBeVisible();
   });
 
@@ -158,7 +159,8 @@ test.describe("product", () => {
     await page.getByRole("radio", { name: "M", exact: true }).click();
     await page.getByRole("radio", { name: "Black" }).click();
     await page.getByRole("button", { name: "Preorder" }).click();
-    await expect(page.getByTestId("cart-lines")).toContainText("Oversized cotton hoodie (M, Black)");
+    await expect(page.getByRole("link", { name: "Oversized cotton hoodie" })).toBeVisible();
+    await expect(page.getByText("Size: M · Colour: Black")).toBeVisible();
   });
 
   test("includes Product JSON-LD in GHS and a 404 for unknown products", async ({ page }) => {
