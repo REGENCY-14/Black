@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0b2f35"/>
+      <stop offset="0.6" stop-color="#14525b"/>
+      <stop offset="1" stop-color="#0a2a30"/>
+    </linearGradient>
+    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0e3d44"/>
+      <stop offset="1" stop-color="#06191d"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#sky)"/>
+  <g fill="#ffffff" fill-opacity="0.55">
+    <circle cx="210" cy="140" r="2.5"/><circle cx="520" cy="90" r="2"/><circle cx="880" cy="170" r="2.5"/>
+    <circle cx="1210" cy="80" r="2"/><circle cx="1420" cy="200" r="3"/><circle cx="360" cy="260" r="1.8"/>
+  </g>
+  <circle cx="1230" cy="270" r="120" fill="#ffffff" fill-opacity="0.07"/>
+  <path d="M0 640 L180 520 L300 590 L470 430 L640 600 L760 540 L900 650 L1100 500 L1260 620 L1440 540 L1600 640 V1000 H0Z" fill="#0a2a30" fill-opacity="0.7"/>
+  <rect y="690" width="1600" height="310" fill="url(#sea)"/>
+  <path d="M0 700 Q200 680 400 700 T800 700 T1200 700 T1600 700" fill="none" stroke="#ffffff" stroke-opacity="0.12" stroke-width="3"/>
+  <!-- container ship -->
+  <g transform="translate(430 470)">
+    <path d="M0 150 H640 L600 215 H40Z" fill="#06191d"/>
+    <rect x="60" y="80" width="90" height="70" fill="#e2b04a" fill-opacity="0.95"/>
+    <rect x="150" y="80" width="90" height="70" fill="#2a7f86"/>
+    <rect x="240" y="80" width="90" height="70" fill="#d6453d" fill-opacity="0.9"/>
+    <rect x="330" y="80" width="90" height="70" fill="#f2f5f5" fill-opacity="0.9"/>
+    <rect x="420" y="80" width="90" height="70" fill="#2372f5" fill-opacity="0.9"/>
+    <rect x="105" y="10" width="90" height="70" fill="#2a7f86"/>
+    <rect x="195" y="10" width="90" height="70" fill="#e2b04a" fill-opacity="0.95"/>
+    <rect x="285" y="10" width="90" height="70" fill="#f2f5f5" fill-opacity="0.9"/>
+    <rect x="510" y="40" width="70" height="110" fill="#f2f5f5"/>
+    <rect x="520" y="55" width="50" height="14" fill="#14525b"/>
+  </g>
+</svg>

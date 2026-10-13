@@ -1,51 +1,54 @@
-"use client";
-
-import Link from "next/link";
+import { Suspense } from "react";
 import { Container } from "@/components/layout/Container";
-import { Card } from "@/components/ui/Card";
+import {
+  DeliveredGallery,
+  HeroCard,
+  HowItWorks,
+  NextContainerTile,
+  PreordersStrip,
+  TrustPoints,
+  UpdatesTile,
+} from "@/components/store/HomeSections";
+import { ProductGridSkeleton } from "@/components/store/ProductGrid";
 import { Skeleton } from "@/components/ui/Skeleton";
-import { brand } from "@/config";
-import { useCategories, useNextBatch, useProducts } from "@/hooks/api";
-import { formatArrivalWindow, formatDate } from "@/lib/dates";
-import { formatGHS } from "@/lib/money";
 
-/** Temporary home: proves the layout and the mock API hooks. Phase 3 replaces it with the real home page. */
+/** Home: a bento grid on desktop, one column of the same tiles on mobile. */
 export default function Home() {
-  const batch = useNextBatch();
-  const products = useProducts({ sort: "popular", limit: 4 });
-  const categories = useCategories();
-
   return (
-    <Container className="flex flex-col gap-6 py-10">
-      <h1 className="text-2xl font-semibold">{brand.tagline}</h1>
-      <div className="grid gap-4 md:grid-cols-3">
-        <Card data-testid="next-batch">
-          <p className="text-sm text-fg-muted">Next container</p>
-          {batch.data ? (
-            <>
-              <p className="text-xl font-semibold">{formatDate(batch.data.expectedArrival)}</p>
-              <p className="text-sm text-fg-muted">{formatArrivalWindow(batch.data.expectedArrival)}</p>
-            </>
-          ) : (
-            <Skeleton className="mt-2 h-8 w-32" />
-          )}
-        </Card>
-        <Card data-testid="categories">
-          <p className="text-sm text-fg-muted">Categories</p>
-          <p className="text-xl font-semibold">{categories.data?.length ?? "…"}</p>
-        </Card>
-        <Card data-testid="popular">
-          <p className="text-sm text-fg-muted">Most ordered</p>
-          {products.data?.pages[0]?.items.slice(0, 2).map((p) => (
-            <p key={p.id} className="text-sm">
-              {p.name} · {formatGHS(p.priceMinor)}
-            </p>
-          )) ?? <Skeleton className="mt-2 h-8 w-40" />}
-        </Card>
+    <Container className="flex flex-col gap-10 py-6 md:py-10">
+      <div className="grid gap-4 lg:grid-cols-12">
+        <div className="lg:col-span-8">
+          <HeroCard />
+        </div>
+        <div className="lg:col-span-4">
+          <Suspense fallback={<Skeleton className="h-56 rounded-card" />}>
+            <NextContainerTile />
+          </Suspense>
+        </div>
       </div>
-      <Link href="/_design" className="min-h-hit self-start rounded-btn bg-primary px-5 py-3 text-primary-fg">
-        Design tokens
-      </Link>
+
+      <Suspense
+        fallback={
+          <div className="flex flex-col gap-4">
+            <Skeleton className="h-7 w-48" />
+            <ProductGridSkeleton count={4} />
+          </div>
+        }
+      >
+        <PreordersStrip />
+      </Suspense>
+
+      <div className="grid gap-4 lg:grid-cols-12">
+        <div className="lg:col-span-7">
+          <HowItWorks />
+        </div>
+        <div className="lg:col-span-5">
+          <UpdatesTile />
+        </div>
+      </div>
+
+      <TrustPoints />
+      <DeliveredGallery />
     </Container>
   );
 }

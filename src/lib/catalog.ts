@@ -1,6 +1,6 @@
 import { cacheLife } from "next/cache";
 import { api } from "@/lib/api/client";
-import type { ProductQuery } from "@/lib/api/types";
+import { ApiError, type ProductQuery } from "@/lib/api/types";
 
 /**
  * Server-side catalogue reads for statically generated pages (home, product).
@@ -18,10 +18,16 @@ export async function getProducts(query: ProductQuery = {}) {
   return api.listProducts(query);
 }
 
+/** Returns null when the product does not exist so pages can call notFound(). */
 export async function getProduct(slug: string) {
   "use cache";
   cacheLife("minutes");
-  return api.getProduct(slug);
+  try {
+    return await api.getProduct(slug);
+  } catch (e) {
+    if (e instanceof ApiError && e.code === "not_found") return null;
+    throw e;
+  }
 }
 
 export async function getBatches() {

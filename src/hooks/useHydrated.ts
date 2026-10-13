@@ -1,16 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 import { useCart } from "@/stores/cart";
+
+// persist is absent during SSR (no localStorage); subscribe/rehydrate only run on the client.
+const subscribe = (onChange: () => void) => useCart.persist.onFinishHydration(onChange);
+const getSnapshot = () => useCart.persist?.hasHydrated() ?? false;
+const getServerSnapshot = () => false;
 
 /** True after the persisted cart has been read from localStorage. Gate cart-dependent UI on this. */
 export function useCartHydrated(): boolean {
-  const [hydrated, setHydrated] = useState(() => useCart.persist?.hasHydrated() ?? false);
+  const hydrated = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   useEffect(() => {
-    // persist is absent during SSR (no localStorage); effects only run on the client.
-    const unsub = useCart.persist.onFinishHydration(() => setHydrated(true));
-    void useCart.persist.rehydrate();
-    return unsub;
+    if (!useCart.persist.hasHydrated()) void useCart.persist.rehydrate();
   }, []);
   return hydrated;
 }

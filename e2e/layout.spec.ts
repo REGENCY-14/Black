@@ -7,17 +7,11 @@ for (const width of widths) {
   test(`home has no horizontal scroll at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/");
-    await expect(page.getByTestId("next-batch")).toContainText("2026");
+    await expect(page.getByRole("heading", { name: "Next container arrives" })).toBeVisible();
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     expect(overflow).toBeLessThanOrEqual(0);
   });
 }
-
-test("mock data is queryable through the hooks", async ({ page }) => {
-  await page.goto("/");
-  await expect(page.getByTestId("categories")).toContainText("5");
-  await expect(page.getByTestId("popular")).toContainText("GH₵");
-});
 
 test("mobile nav opens, lists links and closes on navigate", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 800 });
@@ -50,7 +44,7 @@ for (const scheme of ["light", "dark"] as const) {
   test(`home has no serious axe violations (${scheme})`, async ({ page }) => {
     await page.emulateMedia({ colorScheme: scheme });
     await page.goto("/");
-    await expect(page.getByTestId("next-batch")).toContainText("2026");
+    await expect(page.getByRole("heading", { name: "Next container arrives" })).toBeVisible();
     const { violations } = await new AxeBuilder({ page }).analyze();
     const bad = violations.filter((v) => v.impact === "serious" || v.impact === "critical");
     expect(bad.map((v) => `${v.id}: ${v.nodes.map((n) => n.target).join(" | ")}`)).toEqual([]);

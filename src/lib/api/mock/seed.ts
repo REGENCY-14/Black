@@ -589,9 +589,3 @@ function buildOrder(s: Spec, idx: number): Order {
 export function seedOrders(): Order[] {
   return specs.map(buildOrder);
 }
-
-/** Photos for the home page "Delivered orders" section (placeholders until real photos arrive). */
-export const deliveredPhotos = Array.from({ length: 6 }, (_, i) => ({
-  src: `/delivered/d${i + 1}.svg`,
-  alt: `Delivered order photo ${i + 1}`,
-}));
