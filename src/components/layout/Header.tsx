@@ -1,6 +1,6 @@
 "use client";
 
-import { ShoppingBag } from "lucide-react";
+import { MessageCircle, Music2, ShoppingBag } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Wordmark } from "@/components/brand/Wordmark";
@@ -11,6 +11,7 @@ import { mainNav } from "@/config/nav";
 import { useCartLines } from "@/hooks/useHydrated";
 import { cn } from "@/lib/cn";
 import { cartCount } from "@/stores/cart";
+import { brand, whatsappLink } from "@/config";
 
 function CartLink() {
   const { lines } = useCartLines();
@@ -67,7 +68,25 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <div className="hidden lg:block">
+          <div className="hidden items-center gap-2 lg:flex">
+            <a
+              href={whatsappLink()}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="WhatsApp"
+              className="inline-flex min-h-hit min-w-hit items-center justify-center rounded-btn border border-line bg-card text-fg transition-colors hover:bg-subtle"
+            >
+              <MessageCircle className="size-5" aria-hidden />
+            </a>
+            <a
+              href={brand.social.tiktok}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="TikTok"
+              className="inline-flex min-h-hit min-w-hit items-center justify-center rounded-btn border border-line bg-card text-fg transition-colors hover:bg-subtle"
+            >
+              <Music2 className="size-5" aria-hidden />
+            </a>
             <ThemeToggle />
           </div>
           <CartLink />

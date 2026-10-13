@@ -1,12 +1,12 @@
 "use client";
 
-import { Menu, MessageCircle } from "lucide-react";
+import { Menu, MessageCircle, Music2 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Sheet } from "@/components/ui/Sheet";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
-import { whatsappLink } from "@/config";
+import { brand, whatsappLink } from "@/config";
 import { mainNav } from "@/config/nav";
 
 export function MobileNav() {
@@ -51,6 +51,16 @@ export function MobileNav() {
                 </Link>
               </li>
             ))}
+            <li className="border-b border-line last:border-0">
+              <a
+                href={brand.social.tiktok}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex min-h-14 items-center gap-2 text-lg font-medium"
+              >
+                <Music2 className="size-5" aria-hidden /> TikTok
+              </a>
+            </li>
           </ul>
         </nav>
       </Sheet>
