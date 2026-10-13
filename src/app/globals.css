@@ -32,6 +32,7 @@
   --color-accent: var(--action-accent-bg);
   --color-accent-hover: var(--action-accent-hover);
   --color-accent-soft: var(--action-accent-soft);
+  --color-danger-solid: var(--action-danger-bg);
   --color-whatsapp: var(--action-whatsapp-bg);
   --color-focus: var(--focus-ring);
   --color-success: var(--status-success-fg);
@@ -155,4 +156,26 @@
       scroll-behavior: auto !important;
     }
   }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes sheet-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+@utility size-hit {
+  width: var(--hit-min);
+  height: var(--hit-min);
 }

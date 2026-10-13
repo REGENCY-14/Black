@@ -10,22 +10,24 @@
   --gray-100: #eeeff1;
   --gray-200: #e1e3e6;
   --gray-400: #a3a8ad;
+  --gray-500: #6f767c;
   --gray-600: #5e656b;
   --ink-900: #0d1b1f;
   --teal-900: #0b2f35;
   --teal-700: #14525b;
   --blue-500: #2372f5;
   --blue-600: #1b5fd6;
+  --blue-700: #164fb3;
   --blue-100: #e6efff;
 
   /* status primitives */
-  --green-600: #1f9d63;
+  --green-600: #17794d;
   --green-100: #e5f6ed;
-  --amber-600: #c27a0a;
+  --amber-600: #8f5a00;
   --amber-100: #fdf1dc;
-  --red-600: #d6453d;
+  --red-600: #c23a33;
   --red-100: #fdeceb;
-  --whatsapp-500: #1faa59;
+  --whatsapp-500: #12843f;
 
   /* semantic */
   --bg-page: var(--gray-50);
@@ -35,15 +37,16 @@
   --bg-hero: var(--teal-900);
   --text-primary: var(--ink-900);
   --text-muted: var(--gray-600); /* AA on white */
-  --text-faint: var(--gray-400); /* image-1 grey words: large type / decoration only */
+  --text-faint: var(--gray-500); /* image-1 muted words in two-tone type; AA */
   --text-secondary: var(--gray-600);
   --text-inverse: var(--white);
   --border-subtle: var(--gray-200);
   --border-active: var(--blue-500);
   --action-primary-bg: var(--ink-900);
   --action-primary-fg: var(--white);
-  --action-accent-bg: var(--blue-500);
-  --action-accent-hover: var(--blue-600);
+  --action-accent-bg: var(--blue-600);
+  --action-accent-hover: var(--blue-700);
+  --action-danger-bg: var(--red-600);
   --action-accent-soft: var(--blue-100);
   --action-whatsapp-bg: var(--whatsapp-500);
   --focus-ring: var(--blue-500);
@@ -121,7 +124,7 @@
   --bg-subtle: #172829;
   --text-primary: #f2f5f5;
   --text-muted: #8f9b9f;
-  --text-faint: #6f7b7f;
+  --text-faint: #7f8b8f;
   --text-secondary: #a3adb0;
   --border-subtle: #1d2f31;
   --action-primary-bg: #f2f5f5;
@@ -147,7 +150,7 @@
     --bg-subtle: #172829;
     --text-primary: #f2f5f5;
     --text-muted: #8f9b9f;
-    --text-faint: #6f7b7f;
+    --text-faint: #7f8b8f;
     --text-secondary: #a3adb0;
     --border-subtle: #1d2f31;
     --action-primary-bg: #f2f5f5;
