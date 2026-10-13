@@ -16,7 +16,8 @@ export function SmartImage({
   priority,
   ...rest
 }: Omit<ImageProps, "fill" | "width" | "height"> & { sizes: string }) {
-  const isSvg = typeof src === "string" && src.endsWith(".svg");
+  // SVG placeholders and in-browser data URLs (freshly uploaded photos) cannot go through the optimiser
+  const isSvg = typeof src === "string" && (src.endsWith(".svg") || src.startsWith("data:"));
   return (
     <Image
       src={src}

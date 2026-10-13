@@ -27,6 +27,8 @@ const methodLabel: Record<Order["payments"][number]["method"], string> = {
   telecel_cash: "Telecel Cash",
   airteltigo_money: "AirtelTigo Money",
   card: "Card",
+  cash: "Cash",
+  bank_transfer: "Bank transfer",
 };
 
 function CancelledSummary({ order }: { order: Order }) {

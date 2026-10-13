@@ -11,6 +11,7 @@ async function request<T>(path: string, init?: RequestInit & { json?: unknown })
   try {
     res = await fetch(`${base()}${path}`, {
       ...init,
+      credentials: "include", // session cookie for the admin area
       headers: { "content-type": "application/json", ...init?.headers },
       body: init?.json !== undefined ? JSON.stringify(init.json) : init?.body,
     });
@@ -43,6 +44,45 @@ export const httpApi: Api = {
   createOrder: (input) => request("/orders", { method: "POST", json: input }),
   lookupOrder: (l) => request("/orders/lookup", { method: "POST", json: l }),
   requestCancellation: (l) => request("/orders/cancel-request", { method: "POST", json: l }),
+  admin: {
+    login: (input) => request("/admin/login", { method: "POST", json: input }),
+    logout: () => request("/admin/logout", { method: "POST" }),
+    session: () => request("/admin/session"),
+    dashboard: () => request("/admin/dashboard"),
+    listOrders: (q = {}) =>
+      request(`/admin/orders${qs({ ...q, balanceOutstanding: q.balanceOutstanding ? "1" : undefined })}`),
+    getOrder: (id) => request(`/admin/orders/${encodeURIComponent(id)}`),
+    advanceOrder: (id) => request(`/admin/orders/${encodeURIComponent(id)}/advance`, { method: "POST" }),
+    setDelayed: (id, input) =>
+      request(`/admin/orders/${encodeURIComponent(id)}/delay`, { method: "POST", json: input }),
+    resumeOrder: (id) => request(`/admin/orders/${encodeURIComponent(id)}/resume`, { method: "POST" }),
+    recordPayment: (id, input) =>
+      request(`/admin/orders/${encodeURIComponent(id)}/payments`, { method: "POST", json: input }),
+    cancelOrder: (id, input) =>
+      request(`/admin/orders/${encodeURIComponent(id)}/cancel`, { method: "POST", json: input }),
+    markRefunded: (id) => request(`/admin/orders/${encodeURIComponent(id)}/refunded`, { method: "POST" }),
+    listBatches: () => request("/admin/batches"),
+    advanceBatch: (id) => request(`/admin/batches/${encodeURIComponent(id)}/advance`, { method: "POST" }),
+    listProducts: (q = {}) => request(`/admin/products${qs({ ...q })}`),
+    getProduct: (id) => request(`/admin/products/${encodeURIComponent(id)}`),
+    saveProduct: (id, input) =>
+      id
+        ? request(`/admin/products/${encodeURIComponent(id)}`, { method: "PUT", json: input })
+        : request("/admin/products", { method: "POST", json: input }),
+    setProductStatus: (id, status) =>
+      request(`/admin/products/${encodeURIComponent(id)}/status`, { method: "POST", json: { status } }),
+    deleteProduct: (id) => request(`/admin/products/${encodeURIComponent(id)}`, { method: "DELETE" }),
+    createCategory: (name) => request("/admin/categories", { method: "POST", json: { name } }),
+    renameCategory: (id, name) =>
+      request(`/admin/categories/${encodeURIComponent(id)}`, { method: "PUT", json: { name } }),
+    moveCategory: (id, direction) =>
+      request(`/admin/categories/${encodeURIComponent(id)}/move`, { method: "POST", json: { direction } }),
+    deleteCategory: (id) => request(`/admin/categories/${encodeURIComponent(id)}`, { method: "DELETE" }),
+    listStaff: () => request("/admin/staff"),
+    createStaff: (input) => request("/admin/staff", { method: "POST", json: input }),
+    setStaffActive: (id, active) =>
+      request(`/admin/staff/${encodeURIComponent(id)}/active`, { method: "POST", json: { active } }),
+  },
   payments: {
     startPayment: (input) => request("/payments", { method: "POST", json: input }),
     checkPayment: (reference) => request(`/payments/${encodeURIComponent(reference)}`),

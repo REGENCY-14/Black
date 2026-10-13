@@ -100,6 +100,8 @@ export type OrderStatus =
 export type ProgressStep = Exclude<OrderStatus, "delayed" | "cancelled">;
 
 export type PaymentMethod = "mtn_momo" | "telecel_cash" | "airteltigo_money" | "card";
+/** Methods a payment can have been made with, including ones staff record by hand. */
+export type RecordedMethod = PaymentMethod | "cash" | "bank_transfer";
 export type PaymentPlan = "deposit" | "full";
 
 export interface Customer {
@@ -126,7 +128,7 @@ export interface Payment {
   id: string;
   kind: "deposit" | "full" | "balance";
   amountMinor: number;
-  method: PaymentMethod;
+  method: RecordedMethod;
   status: "pending" | "success" | "failed";
   reference: string;
   createdAt: string;
@@ -222,6 +224,136 @@ export interface PaymentAdapter {
   checkPayment(reference: string): Promise<PaymentAttempt>;
 }
 
+/* ---------- admin ---------- */
+
+export type Role = "owner" | "ghana_staff";
+
+export interface StaffUser {
+  id: string;
+  name: string;
+  email: string;
+  role: Role;
+  active: boolean;
+}
+
+export interface Session {
+  user: Pick<StaffUser, "id" | "name" | "email" | "role">;
+}
+
+export interface AdminOrderQuery {
+  status?: OrderStatus | "all";
+  /** Only orders that still owe money. */
+  balanceOutstanding?: boolean;
+  batchId?: string;
+  /** Matches order number, customer name or phone. */
+  search?: string;
+}
+
+export interface DashboardStats {
+  /** New paid orders and orders that arrived in Ghana: the ones that need somebody to act. */
+  awaitingAction: number;
+  balancesOutstandingCount: number;
+  balancesOutstandingMinor: number;
+  totalOrders: number;
+  nextBatch?: Batch;
+  recentOrders: Order[];
+}
+
+export interface BatchSummary {
+  batch: Batch;
+  orderCount: number;
+  customerCount: number;
+  delayedCount: number;
+}
+
+export interface BatchAdvanceResult {
+  batch: Batch;
+  updated: number;
+  skippedDelayed: number;
+  /** Customers who get a WhatsApp message (SMS fallback). */
+  notified: number;
+}
+
+export interface RecordPaymentInput {
+  amountMinor: number;
+  method: Extract<
+    RecordedMethod,
+    "cash" | "bank_transfer" | "mtn_momo" | "telecel_cash" | "airteltigo_money"
+  >;
+  note?: string;
+}
+
+export interface VariantGroupInput {
+  id?: string;
+  name: string;
+  options: { id?: string; label: string; limit?: number }[];
+}
+
+export interface ProductInput {
+  name: string;
+  description: string;
+  priceMinor: number;
+  images: ProductImage[];
+  categoryId: string;
+  batchId: string;
+  limit: number;
+  variantGroups: VariantGroupInput[];
+  status: ProductStatus;
+}
+
+export interface AdminProductQuery {
+  search?: string;
+  status?: ProductStatus | "all";
+}
+
+export interface CreateStaffInput {
+  name: string;
+  email: string;
+  password: string;
+}
+
+/**
+ * Admin endpoints. Every call is authorised on the server: `ghana_staff` may view orders, record
+ * payments, update order status and advance batches; everything else needs `owner`.
+ */
+export interface AdminApi {
+  login(input: { email: string; password: string }): Promise<Session>;
+  logout(): Promise<void>;
+  session(): Promise<Session | null>;
+
+  dashboard(): Promise<DashboardStats>;
+
+  listOrders(query?: AdminOrderQuery): Promise<Order[]>;
+  getOrder(id: string): Promise<Order>;
+  advanceOrder(id: string): Promise<Order>;
+  setDelayed(id: string, input: { note: string; delayedUntil?: string }): Promise<Order>;
+  resumeOrder(id: string): Promise<Order>;
+  recordPayment(id: string, input: RecordPaymentInput): Promise<Order>;
+  /** owner only */
+  cancelOrder(id: string, input: { note?: string }): Promise<Order>;
+  /** owner only */
+  markRefunded(id: string): Promise<Order>;
+
+  listBatches(): Promise<BatchSummary[]>;
+  advanceBatch(id: string): Promise<BatchAdvanceResult>;
+
+  /** owner only from here down */
+  listProducts(query?: AdminProductQuery): Promise<Product[]>;
+  getProduct(id: string): Promise<Product>;
+  saveProduct(id: string | null, input: ProductInput): Promise<Product>;
+  setProductStatus(id: string, status: ProductStatus): Promise<Product>;
+  deleteProduct(id: string): Promise<void>;
+
+  createCategory(name: string): Promise<Category>;
+  renameCategory(id: string, name: string): Promise<Category>;
+  moveCategory(id: string, direction: "up" | "down"): Promise<Category[]>;
+  deleteCategory(id: string): Promise<void>;
+
+  listStaff(): Promise<StaffUser[]>;
+  createStaff(input: CreateStaffInput): Promise<StaffUser>;
+  setStaffActive(id: string, active: boolean): Promise<StaffUser>;
+}
+
 /* ---------- api ---------- */
 
 export type ApiErrorCode = "not_found" | "validation" | "network" | "forbidden" | "unknown";
@@ -249,4 +381,5 @@ export interface Api {
   requestCancellation(lookup: OrderLookup): Promise<Order>;
 
   payments: PaymentAdapter;
+  admin: AdminApi;
 }

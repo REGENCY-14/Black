@@ -16,6 +16,7 @@ import type {
   Payment,
   Product,
   ProgressStep,
+  StaffUser,
   StatusEntry,
   VariantGroup,
 } from "../types";
@@ -589,3 +590,26 @@ function buildOrder(s: Spec, idx: number): Order {
 export function seedOrders(): Order[] {
   return specs.map(buildOrder);
 }
+
+/**
+ * Admin logins for the mock. Owner: owner@example.com / owner123. Ghana staff: staff@example.com / staff123.
+ * (Passwords are plain text here because this is a mock; the real backend hashes them.)
+ */
+export const seedStaff: (StaffUser & { password: string })[] = [
+  {
+    id: "u1",
+    name: "Bawuah Nuru-deen",
+    email: "owner@example.com",
+    password: "owner123",
+    role: "owner",
+    active: true,
+  },
+  {
+    id: "u2",
+    name: "Kwesi Adomako",
+    email: "staff@example.com",
+    password: "staff123",
+    role: "ghana_staff",
+    active: true,
+  },
+];

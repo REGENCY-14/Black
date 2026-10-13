@@ -29,66 +29,18 @@ import {
   type ProductQuery,
   type StartPaymentInput,
 } from "../types";
-import { batches, categories, products, seedOrders } from "./seed";
+import { adminApi } from "./admin";
+import { clone, delay, getState, maybeFail, randomCode, save } from "./state";
 
-const STORAGE_KEY = "mock-db-v1";
-const isBrowser = typeof window !== "undefined";
-
-const delay = (min = 120, max = 380) =>
-  isBrowser ? new Promise<void>((r) => setTimeout(r, min + Math.random() * (max - min))) : Promise.resolve();
-
-/** Set NEXT_PUBLIC_MOCK_FAILURES=true to see error states during development. */
-function maybeFail() {
-  if (isBrowser && !navigator.onLine) {
-    throw new ApiError("network", "You are offline. Check your connection and try again.");
-  }
-  if (isBrowser && process.env.NEXT_PUBLIC_MOCK_FAILURES === "true" && Math.random() < 0.08) {
-    throw new ApiError("network", "Something went wrong on our side. Try again in a moment.");
-  }
-}
-
-/* ---------- state ---------- */
-
-let orders: Order[] | null = null;
-
-function load(): Order[] {
-  if (orders) return orders;
-  if (isBrowser) {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) return (orders = JSON.parse(raw) as Order[]);
-    } catch {
-      /* fall through to seed */
-    }
-  }
-  return (orders = seedOrders());
-}
-
-function save() {
-  if (!isBrowser || !orders) return;
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(orders));
-  } catch {
-    /* storage full or blocked: keep in memory only */
-  }
-}
-
-const clone = <T>(v: T): T => structuredClone(v);
-
-const ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-function randomCode(n: number) {
-  let s = "";
-  for (let i = 0; i < n; i++) s += ALPHABET[Math.floor(Math.random() * ALPHABET.length)];
-  return s;
-}
+const load = () => getState().orders;
 
 /* ---------- catalogue ---------- */
 
 function listProducts(q: ProductQuery = {}): Page<Product> {
   const { search, categorySlug, sort = "newest", cursor, limit = 12 } = q;
-  let list = products.filter((p) => p.status === "published");
+  let list = getState().products.filter((p) => p.status === "published");
   if (categorySlug && categorySlug !== "all") {
-    const cat = categories.find((c) => c.slug === categorySlug);
+    const cat = getState().categories.find((c) => c.slug === categorySlug);
     list = cat ? list.filter((p) => p.categoryId === cat.id) : [];
   }
   if (search?.trim()) {
@@ -136,7 +88,7 @@ function createOrder(input: CreateOrderInput): CreateOrderResult {
 
   const byBatch = new Map<string, { product: Product; line: (typeof lines)[number] }[]>();
   for (const line of lines) {
-    const product = products.find((p) => p.id === line.productId && p.status === "published");
+    const product = getState().products.find((p) => p.id === line.productId && p.status === "published");
     if (!product) throw new ApiError("not_found", "One of the items in your cart is no longer available.");
     if (line.quantity < 1) throw new ApiError("validation", "Quantity must be at least 1.");
     if (line.quantity > spotsLeft(product, line.variants)) {
@@ -151,7 +103,7 @@ function createOrder(input: CreateOrderInput): CreateOrderResult {
   const created: Order[] = [];
   const all = load();
   for (const [batchId, group] of byBatch) {
-    const batch = batches.find((b) => b.id === batchId) as Batch;
+    const batch = getState().batches.find((b) => b.id === batchId) as Batch;
     if (plan === "deposit" && isBalanceDuePassed(batch.expectedArrival)) {
       throw new ApiError(
         "validation",
@@ -299,7 +251,8 @@ export const mockApi: Api = {
   async listCategories() {
     await delay();
     maybeFail();
-    return clone(categories);
+    // shoppers see categories in the order the owner arranged them
+    return clone([...getState().categories].sort((a, b) => a.sortOrder - b.sortOrder));
   },
   async listProducts(q) {
     await delay();
@@ -309,17 +262,17 @@ export const mockApi: Api = {
   async getProduct(slug) {
     await delay();
     maybeFail();
-    const p = products.find((x) => x.slug === slug && x.status !== "draft");
+    const p = getState().products.find((x) => x.slug === slug && x.status === "published");
     if (!p) throw new ApiError("not_found", "We could not find that product.");
     return clone(p);
   },
   async listBatches() {
     await delay();
-    return clone(batches);
+    return clone(getState().batches);
   },
   async getBatch(id) {
     await delay();
-    const b = batches.find((x) => x.id === id);
+    const b = getState().batches.find((x) => x.id === id);
     if (!b) throw new ApiError("not_found", "Batch not found.");
     return clone(b);
   },
@@ -350,4 +303,5 @@ export const mockApi: Api = {
     return clone(order);
   },
   payments: mockPayments,
+  admin: adminApi,
 };

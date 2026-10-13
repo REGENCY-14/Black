@@ -44,3 +44,11 @@
 - The last tracked order (plus a snapshot for offline) is kept in localStorage `last-tracked-v1`. React Query runs with `networkMode: "always"` so offline failures reach our API layer, which throws a clear network error.
 - Cancellation request is offered only while `canRequestCancellation` (before "Shipped from China").
 - e2e: `getByRole("alert")` also matches Next's route announcer; scope alerts to a container or use text.
+
+# Admin notes
+
+- Mock logins: owner `owner@example.com` / `owner123`; Ghana staff `staff@example.com` / `staff123`. The login page lists them only while mocks are on. Mock state (orders, products, categories, batches, staff) persists in localStorage `mock-db-v2`; the session is `mock-session`.
+- Roles are enforced twice: the menu is built per role and owner-only pages are wrapped in `RoleGate` (no data fetched for staff), AND the API itself refuses (`mock/admin.ts` `requireRole`; the real backend must do the same). Staff: dashboard, orders (advance, delay, record payment), batches. Owner only: cancel/refund, products, categories, staff.
+- Admin lives in `src/app/admin/(panel)` (guarded by `AdminShell`); `/admin/login` is outside the guard. All admin pages are noindex.
+- Mock limitation: server-rendered storefront pages read the seed, not the browser's localStorage, so a product created in the admin shows in the shop list but its own `/shop/<slug>` page is a not-found until a real backend is connected.
+- Toasts render their text twice (visible + Radix live region); in e2e use `getByText(..., { exact: true })`.
