@@ -18,3 +18,12 @@
 - text-xs..text-3xl are the fluid token scale. Radius utilities: rounded-btn, rounded-input, rounded-card, rounded-card-lg, rounded-media, rounded-pill. Shadows: shadow-card, shadow-float. Heights: h-control-lg/md/sm. Hit area: min-h-hit / min-w-hit.
 - Dark mode: `dark:` variant follows `[data-theme="dark"]`; prefer semantic tokens so most components need no `dark:` at all.
 - Merge classes with `cn()` from src/lib/cn.ts.
+
+# Mock API notes
+
+- Mocks are the default (`NEXT_PUBLIC_USE_MOCKS=false` + `NEXT_PUBLIC_API_URL` switches to HTTP). `NEXT_PUBLIC_MOCK_FAILURES=true` injects random errors.
+- Demo order for tracking: `ORD-DEMO01` with phone `024 123 4567` or `demo@example.com`. All seeded orders are in `src/lib/api/mock/seed.ts`.
+- Mock MoMo: approves after ~4s. Wallet number ending `00` is declined, ending `99` never approves (timeout path). Card succeeds immediately.
+- Browser orders persist in localStorage key `mock-db-v1`. Clear it to reset.
+- Server pages read data through `src/lib/catalog.ts` (`use cache`); client screens use hooks in `src/hooks/api.ts`.
+- With Cache Components, `new Date()`/`Math.random()` in server components must be inside `use cache` or a client component.
