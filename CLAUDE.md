@@ -36,3 +36,11 @@
 - The confirmation page reads `sessionStorage["last-checkout"]` (`lib/lastCheckout.ts`).
 - `Field` clones its single child to add id/aria props, so wrap any non-native control in a component that forwards them (see `AreaSelect`).
 - Cache Components: never call `new Date()` as a default parameter on a path that runs during prerender; evaluate it lazily.
+
+# Tracking notes
+
+- Statuses live in `lib/status.ts`; `OrderTimeline` renders the six steps (`data-state` = done/current/upcoming). Delayed keeps `order.step` and adds `DelayedBanner`; Cancelled swaps the timeline for a summary with refund status.
+- Track and /pay verify ownership with order number + phone/email (`OrderLookupForm`). Both can pay a balance through `BalancePayment` (which reuses `PaymentFlow`).
+- The last tracked order (plus a snapshot for offline) is kept in localStorage `last-tracked-v1`. React Query runs with `networkMode: "always"` so offline failures reach our API layer, which throws a clear network error.
+- Cancellation request is offered only while `canRequestCancellation` (before "Shipped from China").
+- e2e: `getByRole("alert")` also matches Next's route announcer; scope alerts to a container or use text.

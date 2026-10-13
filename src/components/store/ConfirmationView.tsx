@@ -2,6 +2,7 @@
 
 import { ArrowRight, CheckCircle2, Copy, MessageCircle } from "lucide-react";
 import Link from "next/link";
+import { useEffect } from "react";
 import { Button, IconButton } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Skeleton } from "@/components/ui/Skeleton";
@@ -11,6 +12,7 @@ import { useOrder } from "@/hooks/api";
 import type { Order } from "@/lib/api/types";
 import { formatArrivalWindow, formatDate } from "@/lib/dates";
 import { useLastCheckout } from "@/lib/lastCheckout";
+import { saveLastTracked } from "@/lib/lastTracked";
 import { formatGHS } from "@/lib/money";
 import { formatGhPhone } from "@/lib/phone";
 import { balanceMinor, hasBalanceDue } from "@/lib/status";
@@ -130,6 +132,12 @@ function LoadedOrder({
   count: number;
 }) {
   const q = useOrder({ orderNumber, contact });
+  // "Track this order" then opens straight away on this device.
+  useEffect(() => {
+    if (q.data) {
+      saveLastTracked({ orderNumber, contact, snapshot: q.data, savedAt: new Date().toISOString() });
+    }
+  }, [q.data, orderNumber, contact]);
   if (q.isPending) return <Skeleton className="h-72 rounded-card-lg" />;
   if (q.isError) {
     return (

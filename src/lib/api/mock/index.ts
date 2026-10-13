@@ -39,6 +39,9 @@ const delay = (min = 120, max = 380) =>
 
 /** Set NEXT_PUBLIC_MOCK_FAILURES=true to see error states during development. */
 function maybeFail() {
+  if (isBrowser && !navigator.onLine) {
+    throw new ApiError("network", "You are offline. Check your connection and try again.");
+  }
   if (isBrowser && process.env.NEXT_PUBLIC_MOCK_FAILURES === "true" && Math.random() < 0.08) {
     throw new ApiError("network", "Something went wrong on our side. Try again in a moment.");
   }

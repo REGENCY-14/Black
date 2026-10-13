@@ -8,7 +8,14 @@ import { TooltipProvider } from "@/components/ui/Tooltip";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [client] = useState(
-    () => new QueryClient({ defaultOptions: { queries: { refetchOnWindowFocus: false, retry: 1 } } }),
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          // 'always': do not pause while offline; the API layer throws a clear network error instead
+          queries: { refetchOnWindowFocus: false, retry: 1, networkMode: "always" },
+          mutations: { networkMode: "always" },
+        },
+      }),
   );
   return (
     <ThemeProvider>
