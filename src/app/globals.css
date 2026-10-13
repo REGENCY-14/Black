@@ -1,0 +1,158 @@
+@import "tailwindcss";
+@import "../styles/tokens.css";
+
+/* Dark variant follows the data-theme attribute set by next-themes. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* Drop Tailwind's default palette so only brand tokens exist. */
+@theme {
+  --color-*: initial;
+  --breakpoint-2xl: 90rem;
+}
+
+@theme inline {
+  --color-white: var(--white);
+  --color-transparent: transparent;
+  --color-current: currentColor;
+
+  --color-page: var(--bg-page);
+  --color-card: var(--bg-card);
+  --color-subtle: var(--bg-subtle);
+  --color-inverse: var(--bg-inverse);
+  --color-hero: var(--bg-hero);
+  --color-fg: var(--text-primary);
+  --color-fg-muted: var(--text-muted);
+  --color-fg-faint: var(--text-faint);
+  --color-fg-secondary: var(--text-secondary);
+  --color-fg-inverse: var(--text-inverse);
+  --color-line: var(--border-subtle);
+  --color-line-active: var(--border-active);
+  --color-primary: var(--action-primary-bg);
+  --color-primary-fg: var(--action-primary-fg);
+  --color-accent: var(--action-accent-bg);
+  --color-accent-hover: var(--action-accent-hover);
+  --color-accent-soft: var(--action-accent-soft);
+  --color-whatsapp: var(--action-whatsapp-bg);
+  --color-focus: var(--focus-ring);
+  --color-success: var(--status-success-fg);
+  --color-success-soft: var(--status-success-bg);
+  --color-warning: var(--status-warning-fg);
+  --color-warning-soft: var(--status-warning-bg);
+  --color-danger: var(--status-danger-fg);
+  --color-danger-soft: var(--status-danger-bg);
+  --color-info: var(--status-info-fg);
+  --color-info-soft: var(--status-info-bg);
+
+  /* fluid type scale replaces Tailwind's text-xs..text-3xl */
+  --text-xs: var(--fs-xs);
+  --text-xs--line-height: 1.5;
+  --text-sm: var(--fs-sm);
+  --text-sm--line-height: 1.5;
+  --text-base: var(--fs-base);
+  --text-base--line-height: 1.5;
+  --text-lg: var(--fs-lg);
+  --text-lg--line-height: 1.4;
+  --text-xl: var(--fs-xl);
+  --text-xl--line-height: 1.2;
+  --text-2xl: var(--fs-2xl);
+  --text-2xl--line-height: 1.15;
+  --text-3xl: var(--fs-3xl);
+  --text-3xl--line-height: 1.1;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Token-backed utilities for values Tailwind's theme namespaces would shadow. */
+@utility rounded-btn {
+  border-radius: var(--radius-btn);
+}
+@utility rounded-input {
+  border-radius: var(--radius-input);
+}
+@utility rounded-card {
+  border-radius: var(--radius-card);
+}
+@utility rounded-card-lg {
+  border-radius: var(--radius-card-lg);
+}
+@utility rounded-media {
+  border-radius: var(--radius-media);
+}
+@utility rounded-pill {
+  border-radius: var(--radius-pill);
+}
+@utility shadow-card {
+  box-shadow: var(--shadow-card);
+}
+@utility shadow-float {
+  box-shadow: var(--shadow-float);
+}
+@utility h-control-lg {
+  height: var(--control-lg);
+}
+@utility h-control-md {
+  height: var(--control-md);
+}
+@utility h-control-sm {
+  height: var(--control-sm);
+}
+@utility min-h-hit {
+  min-height: var(--hit-min);
+}
+@utility min-w-hit {
+  min-width: var(--hit-min);
+}
+@utility pad-card {
+  padding: var(--card-pad);
+}
+@utility container-page {
+  width: 100%;
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-inline: var(--page-gutter);
+}
+@utility pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  body {
+    background: var(--bg-page);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+  /* 16px minimum so iOS Safari never zooms on focus */
+  input,
+  select,
+  textarea {
+    font-size: max(16px, 1em);
+  }
+  :focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

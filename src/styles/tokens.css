@@ -1,0 +1,167 @@
+/*
+ * Design tokens. Primitives -> semantic. Components use ONLY semantic tokens
+ * (via the Tailwind utilities mapped in globals.css). Placeholder palette until
+ * the client approves the brand; changing it must never touch components.
+ */
+:root {
+  /* primitives */
+  --white: #ffffff;
+  --gray-50: #f6f6f7;
+  --gray-100: #eeeff1;
+  --gray-200: #e1e3e6;
+  --gray-400: #a3a8ad;
+  --gray-600: #5e656b;
+  --ink-900: #0d1b1f;
+  --teal-900: #0b2f35;
+  --teal-700: #14525b;
+  --blue-500: #2372f5;
+  --blue-600: #1b5fd6;
+  --blue-100: #e6efff;
+
+  /* status primitives */
+  --green-600: #1f9d63;
+  --green-100: #e5f6ed;
+  --amber-600: #c27a0a;
+  --amber-100: #fdf1dc;
+  --red-600: #d6453d;
+  --red-100: #fdeceb;
+  --whatsapp-500: #1faa59;
+
+  /* semantic */
+  --bg-page: var(--gray-50);
+  --bg-card: var(--white);
+  --bg-subtle: var(--gray-100);
+  --bg-inverse: var(--ink-900);
+  --bg-hero: var(--teal-900);
+  --text-primary: var(--ink-900);
+  --text-muted: var(--gray-600); /* AA on white */
+  --text-faint: var(--gray-400); /* image-1 grey words: large type / decoration only */
+  --text-secondary: var(--gray-600);
+  --text-inverse: var(--white);
+  --border-subtle: var(--gray-200);
+  --border-active: var(--blue-500);
+  --action-primary-bg: var(--ink-900);
+  --action-primary-fg: var(--white);
+  --action-accent-bg: var(--blue-500);
+  --action-accent-hover: var(--blue-600);
+  --action-accent-soft: var(--blue-100);
+  --action-whatsapp-bg: var(--whatsapp-500);
+  --focus-ring: var(--blue-500);
+
+  --status-success-fg: var(--green-600);
+  --status-success-bg: var(--green-100);
+  --status-warning-fg: var(--amber-600);
+  --status-warning-bg: var(--amber-100);
+  --status-danger-fg: var(--red-600);
+  --status-danger-bg: var(--red-100);
+  --status-info-fg: var(--blue-600);
+  --status-info-bg: var(--blue-100);
+
+  /* radius */
+  --radius-btn: 16px;
+  --radius-input: 16px;
+  --radius-card: 24px;
+  --radius-card-lg: 32px;
+  --radius-pill: 9999px;
+  --radius-media: calc(var(--radius-card-lg) - var(--card-pad));
+
+  /* elevation: soft, wide, low contrast */
+  --shadow-card:
+    0 1px 0 rgba(255, 255, 255, 0.9) inset, 0 0 0 1px rgba(13, 27, 31, 0.04),
+    0 12px 32px -12px rgba(13, 27, 31, 0.12);
+  --shadow-float: 0 10px 30px -8px rgba(13, 27, 31, 0.28);
+
+  /* spacing, 4px base */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --card-pad: var(--space-4);
+  --page-gutter: clamp(1rem, 4vw, 2rem);
+
+  /* fluid type scale (375px -> 1440px). Mapped onto text-xs..text-3xl in globals.css */
+  --fs-xs: clamp(0.75rem, 0.73rem + 0.1vw, 0.8125rem);
+  --fs-sm: clamp(0.875rem, 0.85rem + 0.12vw, 0.9375rem);
+  --fs-base: clamp(1rem, 0.97rem + 0.15vw, 1.0625rem);
+  --fs-lg: clamp(1.125rem, 1.05rem + 0.35vw, 1.3125rem);
+  --fs-xl: clamp(1.375rem, 1.2rem + 0.8vw, 1.75rem);
+  --fs-2xl: clamp(1.75rem, 1.4rem + 1.6vw, 2.5rem);
+  --fs-3xl: clamp(2.25rem, 1.6rem + 3vw, 3.75rem);
+
+  /* control sizes */
+  --control-lg: 3.5rem;
+  --control-md: 3rem;
+  --control-sm: 2.5rem;
+  --hit-min: 2.75rem; /* 44px minimum touch target */
+
+  color-scheme: light;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --card-pad: var(--space-5);
+  }
+}
+@media (min-width: 1024px) {
+  :root {
+    --card-pad: var(--space-6);
+  }
+}
+
+/* dark theme (explicit) */
+:root[data-theme="dark"] {
+  --bg-page: #0a1316;
+  --bg-card: #11201f;
+  --bg-subtle: #172829;
+  --text-primary: #f2f5f5;
+  --text-muted: #8f9b9f;
+  --text-faint: #6f7b7f;
+  --text-secondary: #a3adb0;
+  --border-subtle: #1d2f31;
+  --action-primary-bg: #f2f5f5;
+  --action-primary-fg: var(--ink-900);
+  --action-accent-soft: #14284d;
+  --status-success-bg: #12301f;
+  --status-warning-bg: #3a2a0c;
+  --status-danger-bg: #3d1816;
+  --status-info-bg: #14284d;
+  --status-success-fg: #4cc78a;
+  --status-warning-fg: #e8a53a;
+  --status-danger-fg: #f2766f;
+  --status-info-fg: #6aa3ff;
+  --shadow-card: 0 0 0 1px rgba(255, 255, 255, 0.05), 0 12px 32px -12px rgba(0, 0, 0, 0.6);
+  color-scheme: dark;
+}
+
+/* dark theme from system preference, before JS sets data-theme */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg-page: #0a1316;
+    --bg-card: #11201f;
+    --bg-subtle: #172829;
+    --text-primary: #f2f5f5;
+    --text-muted: #8f9b9f;
+    --text-faint: #6f7b7f;
+    --text-secondary: #a3adb0;
+    --border-subtle: #1d2f31;
+    --action-primary-bg: #f2f5f5;
+    --action-primary-fg: var(--ink-900);
+    --action-accent-soft: #14284d;
+    --status-success-bg: #12301f;
+    --status-warning-bg: #3a2a0c;
+    --status-danger-bg: #3d1816;
+    --status-info-bg: #14284d;
+    --status-success-fg: #4cc78a;
+    --status-warning-fg: #e8a53a;
+    --status-danger-fg: #f2766f;
+    --status-info-fg: #6aa3ff;
+    --shadow-card: 0 0 0 1px rgba(255, 255, 255, 0.05), 0 12px 32px -12px rgba(0, 0, 0, 0.6);
+    color-scheme: dark;
+  }
+}
