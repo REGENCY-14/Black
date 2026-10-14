@@ -4,9 +4,11 @@ import Link from "next/link";
 import { Container } from "@/components/layout/Container";
 import { DeliveredGallery, HowItWorks } from "@/components/store/HomeSections";
 import { Button } from "@/components/ui/Button";
-import { Card, Key } from "@/components/ui/Card";
+import { Card, CardMedia, Key } from "@/components/ui/Card";
+import { SmartImage } from "@/components/ui/SmartImage";
 import { brand } from "@/config";
 import { about } from "@/config/about";
+import { images } from "@/config/images";
 
 export const metadata: Metadata = {
   title: "About",
@@ -32,6 +34,12 @@ export default function AboutPage() {
           </Button>
         </div>
       </section>
+
+      <Card size="lg" as="div" aria-hidden className="max-w-4xl">
+        <CardMedia ratio="aspect-[16/8]" className="bg-hero">
+          <SmartImage src={images.hero} alt="" sizes="(min-width: 1024px) 60vw, 100vw" />
+        </CardMedia>
+      </Card>
 
       <section aria-labelledby="principles-title" className="flex flex-col gap-4">
         <h2 id="principles-title" className="text-xl font-semibold">

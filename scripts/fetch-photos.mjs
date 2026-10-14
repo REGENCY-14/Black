@@ -1,15 +1,18 @@
-// Finds and downloads openly licensed stock photos for the product catalogue and the home hero.
+// Downloads stock photos for the product catalogue (and the home hero) from a stock-photo API.
 //
-//   node scripts/fetch-photos.mjs            pin picks for anything missing, download what is not on disk
-//   node scripts/fetch-photos.mjs --refresh  download and resize everything again
+//   PEXELS_API_KEY=...     node scripts/fetch-photos.mjs     https://www.pexels.com/api/   (free, instant)
+//   PIXABAY_API_KEY=...    node scripts/fetch-photos.mjs     https://pixabay.com/api/docs/ (free)
+//   UNSPLASH_ACCESS_KEY=.. node scripts/fetch-photos.mjs     https://unsplash.com/developers (free)
+//   add --refresh to download and resize everything again
 //
-// Source: Openverse (https://openverse.org), whose API is open to scripts and returns the licence and
-// creator of every image. Only licences that allow commercial use AND editing are accepted (CC0,
-// public domain, CC BY), because every photo is cropped and resized. CC BY needs credit, so the credits
-// are written to src/config/photoCredits.ts and shown on the public /credits page.
+// Why keys: stock sites block anonymous scraping, and the free open-licence aggregator (Openverse) has
+// almost nothing for modern consumer products (tried: it returned wrong photos for most items), so
+// the official APIs are the dependable route. All three licences allow commercial use and cropping.
 //
-// Picks are pinned in scripts/photos.config.json, so reruns are deterministic. These are PLACEHOLDERS:
-// a store that sells real products should use its own product photos (see src/config/images.ts).
+// Only photos whose title/tags/description match a product's `must` words are accepted, and every
+// pick is pinned in scripts/photos.config.json so reruns are deterministic. LOOK at the results before
+// shipping them. These are PLACEHOLDERS: a store that sells real products should use its own photos
+// (put them in public/products as p01.jpg, p01-b.jpg ... and see src/config/images.ts).
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import sharp from "sharp";
 
@@ -17,68 +20,112 @@ const CONFIG = "scripts/photos.config.json";
 const cfg = JSON.parse(readFileSync(CONFIG, "utf8"));
 const refresh = process.argv.includes("--refresh");
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-const LICENCES = "cc0,pdm,by";
-const MAX_BYTES = 25 * 1024 * 1024;
+const MAX_BYTES = 30 * 1024 * 1024;
+const UA = { "User-Agent": "preorder-store-placeholder-photos/1.0" };
 
-let lastCall = 0;
-async function api(path) {
-  // anonymous Openverse use is rate limited (about 20 a minute): stay well under it
-  const wait = 3300 - (Date.now() - lastCall);
-  if (wait > 0) await sleep(wait);
-  lastCall = Date.now();
-  for (let attempt = 0; attempt < 4; attempt++) {
-    const res = await fetch(`https://api.openverse.org/v1${path}`, { headers: { "User-Agent": "preorder-store-placeholder-photos/1.0" } });
-    if (res.status === 429) {
-      console.log("  rate limited, waiting 30s");
-      await sleep(30_000);
-      continue;
-    }
-    if (!res.ok) throw new Error(`Openverse ${res.status} for ${path}`);
-    return res.json();
-  }
-  throw new Error("Openverse kept rate limiting; try again in a few minutes");
+/* ---------- providers: each returns [{ id, text, url, width, height, creator, creatorUrl, sourceUrl, license, licenseUrl, source }] ---------- */
+
+const providers = {
+  pexels: {
+    key: process.env.PEXELS_API_KEY,
+    async search(query, orientation) {
+      const o = orientation === "tall" ? "portrait" : orientation === "wide" ? "landscape" : "square";
+      const res = await fetch(
+        `https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&orientation=${o}&size=large&per_page=40`,
+        { headers: { Authorization: this.key, ...UA } },
+      );
+      if (!res.ok) throw new Error(`Pexels ${res.status}`);
+      return ((await res.json()).photos ?? []).map((p) => ({
+        id: `pexels-${p.id}`,
+        text: `${p.alt ?? ""} ${p.url ?? ""}`,
+        url: p.src.original,
+        width: p.width,
+        height: p.height,
+        creator: p.photographer,
+        creatorUrl: p.photographer_url,
+        sourceUrl: p.url,
+        license: "Pexels License",
+        licenseUrl: "https://www.pexels.com/license/",
+        source: "pexels",
+      }));
+    },
+  },
+  pixabay: {
+    key: process.env.PIXABAY_API_KEY,
+    async search(query, orientation) {
+      const o = orientation === "tall" ? "vertical" : orientation === "wide" ? "horizontal" : "all";
+      const res = await fetch(
+        `https://pixabay.com/api/?key=${this.key}&q=${encodeURIComponent(query)}&image_type=photo&orientation=${o}&safesearch=true&min_width=900&per_page=40`,
+        { headers: UA },
+      );
+      if (!res.ok) throw new Error(`Pixabay ${res.status}`);
+      return ((await res.json()).hits ?? []).map((h) => ({
+        id: `pixabay-${h.id}`,
+        text: `${h.tags ?? ""}`,
+        url: h.largeImageURL,
+        width: h.imageWidth,
+        height: h.imageHeight,
+        creator: h.user,
+        creatorUrl: `https://pixabay.com/users/${h.user}-${h.user_id}/`,
+        sourceUrl: h.pageURL,
+        license: "Pixabay Content License",
+        licenseUrl: "https://pixabay.com/service/license-summary/",
+        source: "pixabay",
+      }));
+    },
+  },
+  unsplash: {
+    key: process.env.UNSPLASH_ACCESS_KEY,
+    async search(query, orientation) {
+      const o = orientation === "tall" ? "portrait" : orientation === "wide" ? "landscape" : "squarish";
+      const res = await fetch(
+        `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&orientation=${o}&per_page=30&content_filter=high`,
+        { headers: { Authorization: `Client-ID ${this.key}`, "Accept-Version": "v1", ...UA } },
+      );
+      if (!res.ok) throw new Error(`Unsplash ${res.status}`);
+      return ((await res.json()).results ?? []).map((p) => ({
+        id: `unsplash-${p.id}`,
+        text: `${p.alt_description ?? ""} ${p.description ?? ""} ${(p.tags ?? []).map((t) => t.title).join(" ")}`,
+        url: p.urls.raw,
+        downloadLocation: p.links.download_location, // API terms: report the download before use
+        width: p.width,
+        height: p.height,
+        creator: p.user.name,
+        creatorUrl: `${p.user.links.html}?utm_source=preorder_store&utm_medium=referral`,
+        sourceUrl: `${p.links.html}?utm_source=preorder_store&utm_medium=referral`,
+        license: "Unsplash License",
+        licenseUrl: "https://unsplash.com/license",
+        source: "unsplash",
+      }));
+    },
+  },
+};
+
+const provider = Object.entries(providers).find(([, p]) => p.key);
+
+async function find(p, query, must, aspect, want, minSide) {
+  const hits = await p.search(query, aspect);
+  return hits
+    .filter((h) => Math.min(h.width ?? 0, h.height ?? 0) >= minSide)
+    .filter((h) => must.some((m) => h.text.toLowerCase().includes(m.toLowerCase())))
+    .slice(0, want);
 }
 
-const text = (r) => `${r.title ?? ""} ${(r.tags ?? []).map((t) => t.name).join(" ")}`.toLowerCase();
-
-async function find(query, must, aspect, want, minSide) {
-  const picks = [];
-  const seen = new Set();
-  for (let page = 1; page <= 3 && picks.length < want; page++) {
-    const q = `/images/?q=${encodeURIComponent(query)}&license=${LICENCES}&category=photograph&extension=jpg&aspect_ratio=${aspect}&page_size=20&page=${page}&mature=false&filter_dead=true`;
-    const data = await api(q);
-    for (const r of data.results ?? []) {
-      if (picks.length >= want) break;
-      if (seen.has(r.id) || !r.url || r.mature) continue;
-      seen.add(r.id);
-      if (Math.min(r.width ?? 0, r.height ?? 0) < minSide) continue;
-      if (!must.some((m) => text(r).includes(m.toLowerCase()))) continue;
-      picks.push({
-        id: r.id,
-        url: r.url,
-        title: r.title ?? "",
-        creator: r.creator ?? "Unknown",
-        creatorUrl: r.creator_url ?? "",
-        sourceUrl: r.foreign_landing_url ?? "",
-        license: r.license,
-        licenseVersion: r.license_version ?? "",
-        licenseUrl: r.license_url ?? "",
-        source: r.source ?? "",
-        width: r.width,
-        height: r.height,
-      });
-    }
-    if (!data.results?.length || page >= (data.page_count ?? 1)) break;
+async function fetchResize(pick, width, height, file, p) {
+  if (pick.downloadLocation && p?.key) {
+    await fetch(pick.downloadLocation, { headers: { Authorization: `Client-ID ${p.key}`, ...UA } }).catch(
+      () => undefined,
+    );
   }
-  return picks;
-}
-
-async function fetchResize(pick, width, height, file) {
-  const res = await fetch(pick.url, { headers: { "User-Agent": "preorder-store-placeholder-photos/1.0" } });
-  if (!res.ok) throw new Error(`download ${res.status}: ${pick.url}`);
+  const res = await fetch(pick.url, { headers: UA });
+  if (!res.ok) throw new Error(`download ${res.status}`);
   const buf = Buffer.from(await res.arrayBuffer());
-  if (buf.length > MAX_BYTES) throw new Error(`too large: ${pick.url}`);
-  await sharp(buf).rotate().resize(width, height, { fit: "cover", position: "attention" }).jpeg({ quality: 76, mozjpeg: true }).toFile(file);
+  if (buf.length > MAX_BYTES) throw new Error("file too large");
+  await sharp(buf)
+    .rotate()
+    .resize(width, height, { fit: "cover", position: "attention" })
+    .jpeg({ quality: 76, mozjpeg: true })
+    .toFile(file);
 }
 
 mkdirSync("public/products", { recursive: true });
@@ -86,72 +133,98 @@ mkdirSync("public/brand", { recursive: true });
 const credits = [];
 const missing = [];
 
-// ---- hero
-{
-  const h = cfg.hero;
-  if (!h.picks?.length) {
-    console.log("searching hero:", h.query);
-    h.picks = await find(h.query, h.must, "wide", 1, 1100);
-  }
-  if (h.picks[0]) {
-    if (refresh || !existsSync(h.file)) await fetchResize(h.picks[0], h.width, h.height, h.file);
-    credits.push({ file: h.file.replace(/^public/, ""), label: "Home page hero", ...h.picks[0] });
-    console.log("hero", h.picks[0].id.slice(0, 8), "|", h.picks[0].title.slice(0, 50), "|", h.picks[0].license);
-  } else missing.push("hero");
-  writeFileSync(CONFIG, JSON.stringify(cfg, null, 2) + "\n");
+// ---- hero: already pinned (container ship, public domain). Re-download only on --refresh.
+const hero = cfg.hero.picks?.[0];
+if (hero) {
+  if (refresh || !existsSync(cfg.hero.file))
+    await fetchResize(hero, cfg.hero.width, cfg.hero.height, cfg.hero.file, null);
+  credits.push({ file: cfg.hero.file.replace(/^public/, ""), label: "Home page hero", ...hero });
 }
 
-// ---- products: two photos each (front and detail), cropped to 4:5
+// ---- products
+const needsSearch = Object.values(cfg.products).some((e) => !e.picks?.length);
+if (needsSearch && !provider) {
+  console.error(
+    "\nNo product photos yet and no API key set. Set ONE of PEXELS_API_KEY, PIXABAY_API_KEY or UNSPLASH_ACCESS_KEY (all free) and run again.\n" +
+      'Or skip stock photos: put your own files in public/products (p01.jpg, p01-b.jpg ...) and set images.productExt to "jpg" in src/config/images.ts.\n',
+  );
+  process.exit(1);
+}
+const [providerName, p] = provider ?? [];
+if (provider) console.log("using", providerName);
+
 for (const [id, entry] of Object.entries(cfg.products)) {
-  if (!entry.picks?.length) {
+  if (!entry.picks?.length && p) {
     console.log("searching", id, ":", entry.query);
-    entry.picks = await find(entry.query, entry.must, "tall", 2, 800);
-    if (entry.picks.length < 2) entry.picks.push(...(await find(entry.query, entry.must, "square", 2 - entry.picks.length, 800)));
+    const tall = await find(p, entry.query, entry.must, "tall", 2, 800);
+    entry.picks =
+      tall.length >= 2
+        ? tall
+        : [...tall, ...(await find(p, entry.query, entry.must, "square", 2 - tall.length, 800))].slice(0, 2);
     writeFileSync(CONFIG, JSON.stringify(cfg, null, 2) + "\n");
+    await sleep(500);
   }
-  if (entry.picks.length === 0) {
+  if (!entry.picks?.length) {
     missing.push(id);
     continue;
   }
-  // a product needs two photos: reuse the first if only one was found
   const two = entry.picks.length === 1 ? [entry.picks[0], entry.picks[0]] : entry.picks;
   for (const [i, pick] of two.entries()) {
     const file = `public/products/${id}${i === 0 ? "" : "-b"}.jpg`;
     if (refresh || !existsSync(file)) {
       try {
-        await fetchResize(pick, 1000, 1250, file);
+        await fetchResize(pick, 1000, 1250, file, p);
       } catch (e) {
-        console.log("  could not use", pick.id.slice(0, 8), String(e.message).slice(0, 80));
+        console.log("  could not use", pick.id, String(e.message).slice(0, 80));
         missing.push(`${id}${i ? "-b" : ""}`);
         continue;
       }
     }
     credits.push({ file: file.replace(/^public/, ""), label: entry.query, ...pick });
   }
-  console.log(id.padEnd(4), entry.picks.map((p) => `${p.id.slice(0, 6)} ${p.license}`).join(" | ").padEnd(34), entry.picks[0].title.slice(0, 44));
+  console.log(
+    id.padEnd(4),
+    entry.picks
+      .map((x) => x.id)
+      .join(" | ")
+      .padEnd(36),
+    entry.query,
+  );
 }
 
 writeFileSync(CONFIG, JSON.stringify(cfg, null, 2) + "\n");
 
-// credits shown on /credits (needed for CC BY photos, harmless for the rest)
-const unique = [...new Map(credits.map((c) => [c.id, c])).values()].map((c) => ({
-  file: c.file,
-  label: c.label,
-  title: c.title,
-  creator: c.creator,
-  creatorUrl: c.creatorUrl,
-  sourceUrl: c.sourceUrl,
-  license: c.license,
-  licenseVersion: c.licenseVersion,
-  licenseUrl: c.licenseUrl,
-  source: c.source,
-}));
+const unique = [...new Map(credits.map((c) => [c.id, c])).values()].map(
+  ({ file, label, title, creator, creatorUrl, sourceUrl, license, licenseVersion, licenseUrl, source }) => ({
+    file,
+    label,
+    title: title ?? label,
+    creator,
+    creatorUrl: creatorUrl ?? "",
+    sourceUrl: sourceUrl ?? "",
+    license: String(license ?? ""),
+    licenseVersion: licenseVersion ?? "",
+    licenseUrl: licenseUrl ?? "",
+    source: source ?? "",
+  }),
+);
 writeFileSync(
   "src/config/photoCredits.ts",
-  `// Generated by scripts/fetch-photos.mjs. Credits for the placeholder stock photos, shown on /credits.\n` +
-    `export interface PhotoCredit {\n  file: string;\n  label: string;\n  title: string;\n  creator: string;\n  creatorUrl: string;\n  sourceUrl: string;\n  license: string;\n  licenseVersion: string;\n  licenseUrl: string;\n  source: string;\n}\n\n` +
+  "// Credits for the stock photos in use, shown on /credits. Updated by scripts/fetch-photos.mjs.\n" +
+    "export interface PhotoCredit {\n  file: string;\n  label: string;\n  title: string;\n  creator: string;\n  creatorUrl: string;\n  sourceUrl: string;\n  license: string;\n  licenseVersion: string;\n  licenseUrl: string;\n  source: string;\n}\n\n" +
     `export const photoCredits: PhotoCredit[] = ${JSON.stringify(unique, null, 2)};\n`,
 );
 
-if (missing.length) console.log("\nNO USABLE PHOTO for:", missing.join(", "), "\n(edit query/must in scripts/photos.config.json and rerun)");
-console.log(`\ndone: ${credits.length} photos, ${unique.length} unique. Review them, then switch src/config/images.ts to jpg.`);
+if (missing.length) {
+  console.log(
+    "\nNO USABLE PHOTO for:",
+    missing.join(", "),
+    "\nEdit query/must in scripts/photos.config.json and rerun. The app still uses placeholders (images.productExt is unchanged).",
+  );
+} else {
+  const f = "src/config/images.ts";
+  writeFileSync(f, readFileSync(f, "utf8").replace(/productExt: "\w+"/, 'productExt: "jpg"'));
+  console.log(
+    "\nAll products have photos; src/config/images.ts now uses them. LOOK at them before you ship.",
+  );
+}

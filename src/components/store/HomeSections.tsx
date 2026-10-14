@@ -34,6 +34,7 @@ export function HeroCard() {
           alt="A container ship carrying goods from China at dusk"
           sizes="(min-width: 1024px) 60vw, 100vw"
           priority
+          unoptimized
         />
       </CardMedia>
       <div className="flex flex-1 flex-col gap-5 px-1 pb-1 md:px-2">

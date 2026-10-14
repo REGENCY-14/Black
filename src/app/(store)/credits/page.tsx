@@ -8,16 +8,20 @@ export const metadata: Metadata = {
 };
 
 const licenseName = (c: (typeof photoCredits)[number]) =>
-  c.license === "cc0" ? "CC0 (public domain)" : c.license === "pdm" ? "Public domain mark" : `CC ${c.license.toUpperCase()} ${c.licenseVersion}`;
+  c.license === "cc0"
+    ? "CC0 (public domain)"
+    : c.license === "pdm"
+      ? "Public domain mark"
+      : `CC ${c.license.toUpperCase()} ${c.licenseVersion}`;
 
-/** Required by the licence of several photos (CC BY), so it is public and linked from the footer. */
+/** Credits for stock photos. Some licences (CC BY) require them, so the page is public and linked from the footer. */
 export default function CreditsPage() {
   return (
     <Container className="max-w-3xl py-6 md:py-10">
       <h1 className="text-2xl font-semibold md:text-3xl">Photo credits</h1>
       <p className="mt-2 text-fg-secondary">
-        Some photographs on this site are openly licensed images from Openverse. We thank the photographers. They are used
-        for illustration until we replace them with photos of our own products.
+        Some photographs on this site are free-to-use images from stock-photo libraries. We thank the
+        photographers. They are used for illustration until we replace them with photos of our own products.
       </p>
       <ul className="mt-6 flex flex-col divide-y divide-line rounded-card bg-card shadow-card">
         {photoCredits.map((c) => (
@@ -26,7 +30,12 @@ export default function CreditsPage() {
             <p className="text-fg-secondary">
               By{" "}
               {c.creatorUrl ? (
-                <a href={c.creatorUrl} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">
+                <a
+                  href={c.creatorUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline underline-offset-2"
+                >
                   {c.creator}
                 </a>
               ) : (
@@ -34,7 +43,12 @@ export default function CreditsPage() {
               )}
               {" · "}
               {c.licenseUrl ? (
-                <a href={c.licenseUrl} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">
+                <a
+                  href={c.licenseUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline underline-offset-2"
+                >
                   {licenseName(c)}
                 </a>
               ) : (
@@ -43,7 +57,12 @@ export default function CreditsPage() {
               {c.sourceUrl && (
                 <>
                   {" · "}
-                  <a href={c.sourceUrl} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">
+                  <a
+                    href={c.sourceUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline underline-offset-2"
+                  >
                     Original
                   </a>
                 </>

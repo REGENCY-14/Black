@@ -25,7 +25,7 @@ export function SmartImage({
       fill
       sizes={sizes}
       priority={priority}
-      unoptimized={isSvg}
+      unoptimized={isSvg || rest.unoptimized}
       placeholder={isSvg ? "empty" : "blur"}
       blurDataURL={isSvg ? undefined : BLUR}
       className={className ?? "object-cover"}

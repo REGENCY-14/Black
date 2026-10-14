@@ -1,0 +1,9 @@
+# Not needed to build or run the site, and some of it is private to the project.
+reference
+e2e
+test-results
+playwright-report
+docs
+scripts
+.github
+*.log
