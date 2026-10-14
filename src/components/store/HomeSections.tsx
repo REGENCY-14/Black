@@ -6,6 +6,7 @@ import {
   MessageCircle,
   Music2,
   PackageCheck,
+  PackageSearch,
   Ship,
   Wallet,
 } from "lucide-react";
@@ -48,10 +49,15 @@ export function HeroCard() {
           Preorder from China, <Key>pay {businessRules.deposit.percent}% now</Key>, and{" "}
           <Key>track it to your door</Key>.
         </h1>
-        <div className="mt-auto">
+        <div className="mt-auto flex flex-col gap-3 sm:flex-row">
           <Button asChild size="lg" block="responsive">
             <Link href="/shop">
               Browse preorders <ArrowRight className="size-5" aria-hidden />
+            </Link>
+          </Button>
+          <Button asChild size="lg" variant="secondary" block="responsive">
+            <Link href="/track">
+              <PackageSearch className="size-5" aria-hidden /> Track order
             </Link>
           </Button>
         </div>
@@ -133,6 +139,11 @@ const steps = [
     title: "Pay the balance, receive",
     text: `Pay the rest ${businessRules.balance.dueDaysBeforeArrival} days before the container lands, then arrange delivery with the rider.`,
   },
+  {
+    icon: PackageSearch,
+    title: "Track your order",
+    text: "Follow every step with your order number and phone, any time.",
+  },
 ];
 
 export function HowItWorks() {
@@ -159,6 +170,11 @@ export function HowItWorks() {
           </li>
         ))}
       </ol>
+      <Button asChild variant="secondary" block="responsive" className="mt-5">
+        <Link href="/track">
+          <PackageSearch className="size-5" aria-hidden /> Track order
+        </Link>
+      </Button>
     </Card>
   );
 }

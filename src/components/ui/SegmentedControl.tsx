@@ -19,9 +19,10 @@ interface SegmentedControlProps {
   panels?: Record<string, React.ReactNode>;
 }
 
-const listClass = "no-scrollbar inline-flex max-w-full gap-1 overflow-x-auto rounded-pill bg-subtle p-1";
+const listClass =
+  "no-scrollbar inline-flex max-w-full gap-1 overflow-x-auto rounded-btn bg-subtle md:rounded-pill p-1";
 const itemClass =
-  "inline-flex min-h-hit shrink-0 items-center gap-2 rounded-pill px-4 text-sm font-medium whitespace-nowrap text-fg-secondary transition-colors";
+  "inline-flex min-h-hit shrink-0 items-center gap-2 rounded-btn px-4 md:rounded-pill text-sm font-medium whitespace-nowrap text-fg-secondary transition-colors";
 const activeClass = "bg-card text-fg shadow-card";
 
 function Label({ it }: { it: SegmentItem }) {

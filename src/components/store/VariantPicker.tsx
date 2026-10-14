@@ -45,7 +45,7 @@ export function VariantPicker({
               disabled={soldOut}
               onClick={() => onChange(o.id)}
               className={cn(
-                "min-h-hit min-w-hit rounded-pill border px-4 text-sm font-medium transition-colors",
+                "min-h-hit min-w-hit rounded-btn border px-4 text-sm font-medium transition-colors md:rounded-pill",
                 selected
                   ? "border-primary bg-primary text-primary-fg"
                   : "border-line bg-card text-fg hover:bg-subtle",

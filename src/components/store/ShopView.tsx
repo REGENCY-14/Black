@@ -3,6 +3,7 @@
 import { Check, RotateCcw, Search, SlidersHorizontal, X } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { BackToTop } from "@/components/store/BackToTop";
 import { ProductGrid, ProductGridSkeleton } from "@/components/store/ProductGrid";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -92,6 +93,7 @@ export function ShopView() {
 
   return (
     <div className="flex flex-col gap-5">
+      <BackToTop />
       <div className="flex gap-3">
         <div className="relative flex-1">
           <Search

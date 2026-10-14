@@ -20,7 +20,10 @@ export function Stepper({ value, onChange, min = 1, max = 99, label = "Quantity"
     <div
       role="group"
       aria-label={label}
-      className={cn("inline-flex items-center rounded-pill border border-line bg-card p-0.5", className)}
+      className={cn(
+        "inline-flex items-center rounded-btn border border-line bg-card p-0.5 md:rounded-pill",
+        className,
+      )}
     >
       <button
         type="button"
