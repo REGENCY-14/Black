@@ -80,7 +80,12 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-dvh flex-col lg:flex-row">
       <aside className="hidden w-64 shrink-0 flex-col gap-6 border-r border-line bg-card p-5 lg:flex">
-        <Link href="/admin" aria-label="Admin home" className="inline-flex min-h-hit items-center">
+        <Link
+          href="/admin"
+          prefetch={false}
+          aria-label="Admin home"
+          className="inline-flex min-h-hit items-center"
+        >
           <Wordmark />
         </Link>
         <nav aria-label="Admin" className="flex flex-col gap-1">
@@ -88,6 +93,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             <Link
               key={i.href}
               href={i.href}
+              prefetch={false}
               aria-current={isActive(pathname, i.href) ? "page" : undefined}
               className={cn(
                 "flex min-h-hit items-center gap-3 rounded-btn px-3 text-sm font-medium text-fg-secondary transition-colors hover:bg-subtle hover:text-fg",
@@ -117,7 +123,12 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="sticky top-0 z-30 border-b border-line bg-page/90 backdrop-blur-md lg:hidden">
           <div className="container-page flex h-14 items-center justify-between gap-3">
-            <Link href="/admin" aria-label="Admin home" className="inline-flex min-h-hit items-center">
+            <Link
+              href="/admin"
+              prefetch={false}
+              aria-label="Admin home"
+              className="inline-flex min-h-hit items-center"
+            >
               <Wordmark />
             </Link>
             <div className="flex items-center gap-2">
@@ -138,6 +149,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
               <Link
                 key={i.href}
                 href={i.href}
+                prefetch={false}
                 aria-current={isActive(pathname, i.href) ? "page" : undefined}
                 className={cn(
                   "inline-flex min-h-hit shrink-0 items-center gap-2 rounded-pill px-4 text-sm font-medium whitespace-nowrap text-fg-secondary",

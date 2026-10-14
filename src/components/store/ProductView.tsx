@@ -90,14 +90,22 @@ export function ProductView({
       </div>
 
       <div className="flex flex-col gap-6">
-        <nav aria-label="Breadcrumb" className="text-sm text-fg-muted">
-          <Link href="/shop" className="hover:text-fg">
+        <nav aria-label="Breadcrumb" className="flex flex-wrap items-center text-sm text-fg-muted">
+          <Link
+            href="/shop"
+            className="inline-flex min-h-hit min-w-hit items-center justify-center hover:text-fg"
+          >
             Shop
           </Link>
           {category && (
             <>
-              {" / "}
-              <Link href={`/shop?category=${category.slug}`} className="hover:text-fg">
+              <span aria-hidden className="px-1.5">
+                /
+              </span>
+              <Link
+                href={`/shop?category=${category.slug}`}
+                className="inline-flex min-h-hit items-center hover:text-fg"
+              >
                 {category.name}
               </Link>
             </>

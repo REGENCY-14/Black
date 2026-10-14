@@ -10,7 +10,11 @@
     "typecheck": "tsc --noEmit",
     "format": "prettier --write .",
     "test": "vitest run",
-    "e2e": "playwright test"
+    "e2e": "playwright test --project=main",
+    "check": "tsc --noEmit && eslint && vitest run",
+    "icons": "node scripts/gen-icons.mjs",
+    "e2e:perf": "playwright test --project=perf --no-deps --workers=1",
+    "e2e:all": "playwright test"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",

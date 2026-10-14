@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { AppProviders } from "@/components/providers/AppProviders";
 
 // The admin area is private: never indexed, never linked from the storefront.
 export const metadata: Metadata = {
@@ -7,5 +8,9 @@ export const metadata: Metadata = {
 };
 
 export default function AdminRootLayout({ children }: { children: React.ReactNode }) {
-  return <div className="flex min-h-dvh flex-col">{children}</div>;
+  return (
+    <AppProviders>
+      <div className="flex min-h-dvh flex-col">{children}</div>
+    </AppProviders>
+  );
 }

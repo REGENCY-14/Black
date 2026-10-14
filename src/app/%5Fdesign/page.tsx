@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Wordmark } from "@/components/brand/Wordmark";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { AppProviders } from "@/components/providers/AppProviders";
+import { TooltipProvider } from "@/components/ui/Tooltip";
 import { Components } from "./Components";
 
 export const metadata: Metadata = { title: "Design tokens", robots: { index: false } };
@@ -161,7 +163,11 @@ export default function DesignPage() {
         </ul>
       </Section>
 
-      <Components />
+      <TooltipProvider>
+        <AppProviders>
+          <Components />
+        </AppProviders>
+      </TooltipProvider>
     </main>
   );
 }

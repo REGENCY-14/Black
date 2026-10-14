@@ -31,13 +31,21 @@ export function ShopView() {
   const category = params.get("category") ?? "all";
   const sort: ProductSort = isSort(params.get("sort")) ? (params.get("sort") as ProductSort) : "newest";
 
+  // The URL as it will be once the changes already requested have been applied. The router commits
+  // asynchronously, so two quick changes (clear the search, then pick a category) must build on each
+  // other here rather than on a URL that has not caught up yet.
+  const latest = useRef(new URLSearchParams());
+  useEffect(() => {
+    latest.current = new URLSearchParams(params.toString());
+  }, [params]);
+
   const setParam = (changes: Record<string, string | null>) => {
-    // read the live URL, not the render-time snapshot, so back-to-back changes (search + category) never clobber each other
-    const next = new URLSearchParams(window.location.search);
+    const next = new URLSearchParams(latest.current.toString());
     for (const [k, v] of Object.entries(changes)) {
       if (v && v !== "all" && !(k === "sort" && v === "newest")) next.set(k, v);
       else next.delete(k);
     }
+    latest.current = next;
     const qs = next.toString();
     router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
   };
@@ -78,6 +86,7 @@ export function ShopView() {
   const clear = () => {
     setSearch("");
     lastPushed.current = "";
+    latest.current = new URLSearchParams();
     router.replace(pathname, { scroll: false });
   };
 
@@ -103,7 +112,11 @@ export function ShopView() {
             <button
               type="button"
               aria-label="Clear search"
-              onClick={() => setSearch("")}
+              onClick={() => {
+                setSearch("");
+                lastPushed.current = "";
+                setParam({ q: null });
+              }}
               className="absolute top-1/2 right-1 inline-flex size-hit -translate-y-1/2 items-center justify-center rounded-pill text-fg-muted hover:bg-subtle"
             >
               <X className="size-4" aria-hidden />

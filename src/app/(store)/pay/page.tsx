@@ -3,12 +3,17 @@
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { Container } from "@/components/layout/Container";
+import { QueryProvider } from "@/components/providers/QueryProvider";
 import { PayView } from "@/components/store/PayView";
 import { Skeleton } from "@/components/ui/Skeleton";
 
 function PayFromParams() {
   const order = useSearchParams().get("order") ?? undefined;
-  return <PayView initialOrderNumber={order} />;
+  return (
+    <QueryProvider>
+      <PayView initialOrderNumber={order} />
+    </QueryProvider>
+  );
 }
 
 export default function PayPage() {

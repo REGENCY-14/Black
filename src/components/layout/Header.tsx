@@ -4,12 +4,11 @@ import { MessageCircle, Music2, ShoppingBag } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Wordmark } from "@/components/brand/Wordmark";
-import { Container } from "@/components/layout/Container";
 import { MobileNav } from "@/components/layout/MobileNav";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { mainNav } from "@/config/nav";
 import { useCartLines } from "@/hooks/useHydrated";
-import { cn } from "@/lib/cn";
+import clsx from "clsx";
 import { cartCount } from "@/stores/cart";
 import { brand, whatsappLink } from "@/config";
 
@@ -39,7 +38,7 @@ export function Header() {
   const pathname = usePathname();
   return (
     <header className="sticky top-0 z-30 border-b border-line bg-page/85 backdrop-blur-md">
-      <Container className="flex h-16 items-center justify-between gap-4">
+      <div className="container-page flex h-16 items-center justify-between gap-4">
         <Link
           href="/"
           aria-label="Home"
@@ -56,7 +55,7 @@ export function Header() {
                 key={item.href}
                 href={item.href}
                 aria-current={active ? "page" : undefined}
-                className={cn(
+                className={clsx(
                   "inline-flex min-h-hit items-center rounded-pill px-4 text-sm font-medium text-fg-secondary transition-colors hover:bg-subtle hover:text-fg",
                   active && "bg-card text-fg shadow-card",
                 )}
@@ -92,7 +91,7 @@ export function Header() {
           <CartLink />
           <MobileNav />
         </div>
-      </Container>
+      </div>
     </header>
   );
 }

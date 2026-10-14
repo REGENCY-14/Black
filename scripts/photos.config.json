@@ -1,0 +1,430 @@
+{
+  "_note": "Search terms and match words for stock photos from Openverse (openly licensed). `must` = at least one of these words has to appear in a photo's title or tags, so off-topic hits are skipped. Run `node scripts/fetch-photos.mjs`. The first run pins the chosen photos in `picks`, so later runs download exactly the same ones. To swap a photo: delete that entry's `picks`, edit `query`/`must`, rerun. These are PLACEHOLDERS: replace them with the store's own product photos before launch (see src/config/images.ts).",
+  "hero": {
+    "query": "cargo ship containers sea",
+    "must": [
+      "ship",
+      "container",
+      "cargo",
+      "vessel",
+      "port"
+    ],
+    "orientation": "wide",
+    "width": 1600,
+    "height": 1000,
+    "file": "public/brand/hero.jpg",
+    "picks": [
+      {
+        "id": "9f13fa3a-83c3-4e4b-b9b5-5c5407a1a738",
+        "url": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL3B4MTIyMjE3MC1pbWFnZS1rd3Z3NGE1YS5qcGc.jpg",
+        "title": "Free container ship dock image",
+        "creator": "Unknown",
+        "creatorUrl": "",
+        "sourceUrl": "https://www.rawpixel.com/image/5912363/image-background-public-domain-ocean",
+        "license": "cc0",
+        "licenseVersion": "1.0",
+        "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "source": "rawpixel",
+        "width": 3390,
+        "height": 2726
+      }
+    ]
+  },
+  "products": {
+    "p01": {
+      "query": "air fryer",
+      "must": [
+        "air fryer",
+        "airfryer",
+        "fryer"
+      ],
+      "picks": []
+    },
+    "p02": {
+      "query": "cookware set pots and pans",
+      "must": [
+        "cookware",
+        "pots",
+        "pans",
+        "saucepan",
+        "skillet"
+      ],
+      "picks": []
+    },
+    "p03": {
+      "query": "glass electric kettle",
+      "must": [
+        "kettle"
+      ],
+      "picks": []
+    },
+    "p04": {
+      "query": "bamboo drawer organizer",
+      "must": [
+        "organizer",
+        "organiser",
+        "bamboo",
+        "tray",
+        "drawer"
+      ],
+      "picks": []
+    },
+    "p05": {
+      "query": "insulated water bottle",
+      "must": [
+        "bottle",
+        "flask",
+        "thermos",
+        "tumbler"
+      ],
+      "picks": []
+    },
+    "p06": {
+      "query": "face serum bottle skincare",
+      "must": [
+        "serum",
+        "skincare",
+        "dropper",
+        "cosmetic"
+      ],
+      "picks": []
+    },
+    "p07": {
+      "query": "satin pillowcase",
+      "must": [
+        "pillow",
+        "satin",
+        "silk"
+      ],
+      "picks": []
+    },
+    "p08": {
+      "query": "hair dryer",
+      "must": [
+        "hair dryer",
+        "hairdryer",
+        "blow dryer",
+        "dryer"
+      ],
+      "picks": [
+        {
+          "id": "c8cfaba5-dc46-4385-8b4f-f8223a561b47",
+          "url": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvZmlsZXMvd2Vic2l0ZS8yMDI0LTAyL3djcnk3ajlxZDItaW1hZ2UuanBn.jpg",
+          "title": "Diffraction electrons microcrystallitic crystals powders;",
+          "creator": "Unknown",
+          "creatorUrl": "",
+          "sourceUrl": "https://www.rawpixel.com/image/14006055/photo-image-background-art-pattern",
+          "license": "cc0",
+          "licenseVersion": "1.0",
+          "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source": "rawpixel",
+          "width": 1339,
+          "height": 1359
+        }
+      ]
+    },
+    "p09": {
+      "query": "makeup brushes",
+      "must": [
+        "brush",
+        "makeup",
+        "make-up"
+      ],
+      "picks": [
+        {
+          "id": "ec9680db-ae00-4858-a9e5-f4ffda5e9996",
+          "url": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL2ZycmF6b3Jfc2hhdmluZ19icnVzaF9ob2xkZXJzXzEtaW1hZ2Uta3liYXNtem4uanBn.jpg",
+          "title": "Makeup brushes, cosmetics, beauty tools",
+          "creator": "Unknown",
+          "creatorUrl": "",
+          "sourceUrl": "https://www.rawpixel.com/image/6019398/photo-image-public-domain-brush-makeup",
+          "license": "cc0",
+          "licenseVersion": "1.0",
+          "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source": "rawpixel",
+          "width": 2848,
+          "height": 4272
+        },
+        {
+          "id": "5e1f19d4-8812-44a9-bd83-59c0b8be8e35",
+          "url": "https://live.staticflickr.com/65535/51926314817_e023545155_b.jpg",
+          "title": "Woman Holding a Lip Brush (1920) print in high resolution by Goyō Hashiguchi. Original from the Minneapolis Institute of Art. Digitally enhanced by rawpixel.",
+          "creator": "Free Public Domain Illustrations by rawpixel",
+          "creatorUrl": "https://www.flickr.com/photos/153584064@N07",
+          "sourceUrl": "https://www.flickr.com/photos/153584064@N07/51926314817",
+          "license": "by",
+          "licenseVersion": "2.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+          "source": "flickr",
+          "width": 874,
+          "height": 1024
+        }
+      ]
+    },
+    "p10": {
+      "query": "vanity mirror with lights",
+      "must": [
+        "mirror",
+        "vanity"
+      ],
+      "picks": []
+    },
+    "p11": {
+      "query": "wireless earbuds",
+      "must": [
+        "earbuds",
+        "earphones",
+        "airpods",
+        "headphones"
+      ],
+      "picks": []
+    },
+    "p12": {
+      "query": "smartwatch",
+      "must": [
+        "smartwatch",
+        "smart watch",
+        "watch"
+      ],
+      "picks": [
+        {
+          "id": "ced9592f-e9b1-4a52-999a-e910a1601504",
+          "url": "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvdXB3azYxOTIxNzI0LXdpa2ltZWRpYS1pbWFnZS1rb3dlcW9jbC5qcGc.jpg",
+          "title": "Hands smartwatch",
+          "creator": "Unknown",
+          "creatorUrl": "",
+          "sourceUrl": "https://www.rawpixel.com/image/3285846/free-photo-image-hands-cc0-creative-commons",
+          "license": "cc0",
+          "licenseVersion": "1.0",
+          "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source": "rawpixel",
+          "width": 3726,
+          "height": 4096
+        },
+        {
+          "id": "dbf7cb44-ee3b-4f14-beb2-8f47fe645839",
+          "url": "https://live.staticflickr.com/65535/53918478865_5da949d838_b.jpg",
+          "title": "i.Inferior @ FetishFair",
+          "creator": "nathaxsavage",
+          "creatorUrl": "https://www.flickr.com/photos/192454555@N03",
+          "sourceUrl": "https://www.flickr.com/photos/192454555@N03/53918478865",
+          "license": "by",
+          "licenseVersion": "2.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+          "source": "flickr",
+          "width": 1024,
+          "height": 1024
+        }
+      ]
+    },
+    "p13": {
+      "query": "power bank",
+      "must": [
+        "power bank",
+        "powerbank",
+        "charger",
+        "battery"
+      ],
+      "picks": []
+    },
+    "p14": {
+      "query": "ring light tripod",
+      "must": [
+        "ring light",
+        "tripod",
+        "light"
+      ],
+      "picks": []
+    },
+    "p15": {
+      "query": "bluetooth speaker",
+      "must": [
+        "speaker"
+      ],
+      "picks": [
+        {
+          "id": "c7ae2915-4ab8-459e-8690-ebbd28149b7d",
+          "url": "https://live.staticflickr.com/65535/52059554199_aacef0bb9f_b.jpg",
+          "title": "IMG_20220416_221918_680",
+          "creator": "pockethifi",
+          "creatorUrl": "https://www.flickr.com/photos/31667440@N04",
+          "sourceUrl": "https://www.flickr.com/photos/31667440@N04/52059554199",
+          "license": "by",
+          "licenseVersion": "2.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+          "source": "flickr",
+          "width": 1024,
+          "height": 1024
+        }
+      ]
+    },
+    "p16": {
+      "query": "hoodie",
+      "must": [
+        "hoodie",
+        "sweatshirt"
+      ],
+      "picks": [
+        {
+          "id": "8f2767d8-03a1-4742-b807-e328e5d04147",
+          "url": "https://live.staticflickr.com/65535/52993252983_12e434dae1_b.jpg",
+          "title": "Hoodie !",
+          "creator": "John Freshney",
+          "creatorUrl": "https://www.flickr.com/photos/139753516@N02",
+          "sourceUrl": "https://www.flickr.com/photos/139753516@N02/52993252983",
+          "license": "by",
+          "licenseVersion": "2.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+          "source": "flickr",
+          "width": 833,
+          "height": 1024
+        },
+        {
+          "id": "c1606c87-7f65-4111-9ed5-18cf6404ac4f",
+          "url": "https://live.staticflickr.com/65535/52172239210_e348868a57_b.jpg",
+          "title": "Continuing the pink hoodie theme with one from Bravermountain",
+          "creator": "zimpenfish",
+          "creatorUrl": "https://www.flickr.com/photos/12708857@N00",
+          "sourceUrl": "https://www.flickr.com/photos/12708857@N00/52172239210",
+          "license": "by",
+          "licenseVersion": "2.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+          "source": "flickr",
+          "width": 819,
+          "height": 1024
+        }
+      ]
+    },
+    "p17": {
+      "query": "linen shirt",
+      "must": [
+        "shirt",
+        "linen"
+      ],
+      "picks": [
+        {
+          "id": "066949ae-9a85-4015-b91c-8306c8b5b2ae",
+          "url": "https://live.staticflickr.com/65535/53910718175_7e3cfa62aa_b.jpg",
+          "title": "Shirt | 16th century",
+          "creator": "museado",
+          "creatorUrl": "https://www.flickr.com/photos/200781279@N05",
+          "sourceUrl": "https://www.flickr.com/photos/200781279@N05/53910718175",
+          "license": "cc0",
+          "licenseVersion": "1.0",
+          "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source": "flickr",
+          "width": 809,
+          "height": 1024
+        },
+        {
+          "id": "540b6638-0fff-4fca-919f-708574a221fc",
+          "url": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTA0L25nYTEzODQyLWltYWdlLmpwZw.jpg",
+          "title": "Shirt Front (1935/1942) Mae Szilvasy",
+          "creator": "Unknown",
+          "creatorUrl": "",
+          "sourceUrl": "https://www.rawpixel.com/image/10062891/shirt-front-19351942-mae-szilvasy",
+          "license": "cc0",
+          "licenseVersion": "1.0",
+          "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source": "rawpixel",
+          "width": 3395,
+          "height": 4096
+        }
+      ]
+    },
+    "p18": {
+      "query": "leather crossbody bag",
+      "must": [
+        "bag",
+        "purse",
+        "handbag",
+        "crossbody"
+      ],
+      "picks": []
+    },
+    "p19": {
+      "query": "running shoes sneakers",
+      "must": [
+        "sneaker",
+        "shoes",
+        "trainer",
+        "running"
+      ],
+      "picks": []
+    },
+    "p20": {
+      "query": "african print dress",
+      "must": [
+        "dress",
+        "ankara",
+        "african",
+        "wax print",
+        "kente"
+      ],
+      "picks": [
+        {
+          "id": "e5226f43-c5b1-477b-a4fc-e509275fb9e9",
+          "url": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA5L21ldDgxOTI4Ny1pbWFnZS5qcGc.jpg",
+          "title": "woman wearing saya standing profile",
+          "creator": "themet",
+          "creatorUrl": "",
+          "sourceUrl": "https://www.rawpixel.com/image/9086786/photo-image-art-watercolors-vintage",
+          "license": "cc0",
+          "licenseVersion": "1.0",
+          "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source": "rawpixel",
+          "width": 3019,
+          "height": 3358
+        },
+        {
+          "id": "4579692e-706c-46f6-b81c-b1a5ee451231",
+          "url": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA5L21ldDgxOTI4My1pbWFnZS5qcGc.jpg",
+          "title": "woman getting her saya viewed",
+          "creator": "themet",
+          "creatorUrl": "",
+          "sourceUrl": "https://www.rawpixel.com/image/9186249/image-art-watercolor-vintage",
+          "license": "cc0",
+          "licenseVersion": "1.0",
+          "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "source": "rawpixel",
+          "width": 2956,
+          "height": 3349
+        }
+      ]
+    },
+    "p21": {
+      "query": "building blocks toy bricks",
+      "must": [
+        "blocks",
+        "bricks",
+        "lego",
+        "toy"
+      ],
+      "picks": []
+    },
+    "p22": {
+      "query": "children tablet",
+      "must": [
+        "tablet",
+        "ipad"
+      ],
+      "picks": []
+    },
+    "p23": {
+      "query": "baby stroller",
+      "must": [
+        "stroller",
+        "pram",
+        "pushchair",
+        "buggy"
+      ],
+      "picks": []
+    },
+    "p24": {
+      "query": "remote control car",
+      "must": [
+        "remote control",
+        "rc car",
+        "toy car",
+        "car"
+ 

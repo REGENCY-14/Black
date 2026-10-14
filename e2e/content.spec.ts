@@ -68,7 +68,7 @@ test.describe("policy pages", () => {
 
   test("an unknown policy shows the not-found page", async ({ page }) => {
     await page.goto("/policies/not-a-policy");
-    await expect(page.getByText(/could not be found/i)).toBeVisible();
+    await expect(page.getByText(/could not find that page/i)).toBeVisible();
   });
 
   test("the policies index lists all three, and the footer and checkout links reach them", async ({

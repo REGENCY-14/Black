@@ -14,7 +14,8 @@ import { Sheet } from "@/components/ui/Sheet";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { Stepper } from "@/components/ui/Stepper";
 import { useToast } from "@/components/ui/Toast";
-import { FloatingPill, Tooltip } from "@/components/ui/Tooltip";
+import { FloatingPill } from "@/components/ui/FloatingPill";
+import { Tooltip } from "@/components/ui/Tooltip";
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (

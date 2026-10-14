@@ -11,12 +11,13 @@ import {
 } from "lucide-react";
 import { cacheLife } from "next/cache";
 import Link from "next/link";
-import { ProductGrid } from "@/components/store/ProductGrid";
+import { ProductCarousel } from "@/components/store/ProductGrid";
 import { AvatarStack } from "@/components/ui/AvatarStack";
 import { Button } from "@/components/ui/Button";
 import { Card, CardMedia, Key } from "@/components/ui/Card";
 import { SmartImage } from "@/components/ui/SmartImage";
 import { brand, businessRules, contact, whatsappLink } from "@/config";
+import { images } from "@/config/images";
 import { deliveredPhotos } from "@/config/trust";
 import { getBatches, getProducts } from "@/lib/catalog";
 import { dateTileParts, formatArrivalWindow, relativeDays } from "@/lib/dates";
@@ -29,7 +30,7 @@ export function HeroCard() {
     <Card size="lg" as="section" className="flex h-full flex-col gap-5" aria-labelledby="hero-title">
       <CardMedia ratio="aspect-[16/10]" className="bg-hero">
         <SmartImage
-          src="/brand/hero.svg"
+          src={images.hero}
           alt="A container ship carrying goods from China at dusk"
           sizes="(min-width: 1024px) 60vw, 100vw"
           priority
@@ -109,7 +110,10 @@ export async function PreordersStrip() {
           See all <ArrowRight className="size-4" aria-hidden />
         </Link>
       </div>
-      <ProductGrid products={items} batches={batches} className="xl:grid-cols-4" />
+      <p className="-mt-2 flex items-center gap-1 text-sm text-fg-muted md:hidden">
+        Swipe to see more <ArrowRight className="size-4" aria-hidden />
+      </p>
+      <ProductCarousel products={items} batches={batches} label="Preorders open now, scroll sideways" />
     </section>
   );
 }

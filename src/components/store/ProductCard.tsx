@@ -10,7 +10,7 @@ import { splitProductName } from "@/lib/twoTone";
 
 /**
  * Product tile in the reference-1 style: soft white card, nested media radius, two-tone name.
- * Padding is tighter than hero cards so two columns fit at 360px.
+ * Full width on phones (4:3 image, so a long list does not need endless scrolling), then 4:5 in the grid.
  */
 export function ProductCard({
   product,
@@ -33,11 +33,11 @@ export function ProductCard({
         className,
       )}
     >
-      <div className="relative aspect-[4/5] overflow-hidden rounded-[calc(var(--radius-card)-var(--space-2))] bg-subtle">
+      <div className="relative aspect-[4/3] overflow-hidden rounded-[calc(var(--radius-card)-var(--space-2))] bg-subtle sm:aspect-[4/5]">
         <SmartImage
           src={product.images[0]!.src}
           alt={product.images[0]!.alt}
-          sizes="(min-width: 1280px) 22vw, (min-width: 768px) 30vw, 46vw"
+          sizes="(min-width: 1280px) 22vw, (min-width: 768px) 30vw, (min-width: 640px) 46vw, 92vw"
           priority={priority}
           className={cn(
             "object-cover transition-transform duration-300 group-hover:scale-[1.03]",
@@ -49,14 +49,12 @@ export function ProductCard({
         </div>
       </div>
       <div className="flex flex-1 flex-col gap-1 px-2 pb-2">
-        <h3 className="text-sm leading-snug font-medium text-fg-faint sm:text-base">
+        <h3 className="text-base leading-snug font-medium text-fg-faint">
           {muted && <span>{muted} </span>}
           <strong className="font-semibold text-fg">{key}</strong>
           {spec && <span>, {spec}</span>}
         </h3>
-        <p className="mt-auto pt-1 text-sm font-semibold tabular-nums sm:text-base">
-          {formatGHS(product.priceMinor)}
-        </p>
+        <p className="mt-auto pt-1 text-base font-semibold tabular-nums">{formatGHS(product.priceMinor)}</p>
         {expectedArrival && (
           <p className="text-xs text-fg-muted">Preorder · arrives {formatDayMonth(expectedArrival)}</p>
         )}

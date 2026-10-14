@@ -4,6 +4,7 @@
  * Demo order for tracking: ORD-DEMO01 with phone 024 123 4567 (or demo@example.com).
  */
 import { businessRules } from "@/config";
+import { images } from "@/config/images";
 import { addDays, balanceDueDate } from "@/lib/dates";
 import { computeDeposit } from "@/lib/money";
 import { progressSteps } from "@/lib/status";
@@ -288,8 +289,8 @@ export const products: Product[] = rows.map(
       description,
       priceMinor: cedis * 100,
       images: [
-        { src: `/products/p${id}.svg`, alt: `${name}, front` },
-        { src: `/products/p${id}-b.svg`, alt: `${name}, detail` },
+        { src: `/products/p${id}.${images.productExt}`, alt: `${name}, front` },
+        { src: `/products/p${id}-b.${images.productExt}`, alt: `${name}, detail` },
       ],
       categoryId: categories[cat]!.id,
       availability: "preorder",

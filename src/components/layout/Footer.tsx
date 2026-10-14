@@ -80,7 +80,12 @@ export function Footer() {
           <p>
             © <CurrentYear /> {brand.name}. All prices in Ghana cedis.
           </p>
-          <p>Prices include shipping from China and duty.</p>
+          <p>
+            Prices include shipping from China and duty.{" "}
+            <Link href="/credits" className="inline-flex min-h-hit items-center underline underline-offset-2">
+              Photo credits
+            </Link>
+          </p>
         </Container>
       </div>
     </footer>

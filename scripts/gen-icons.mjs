@@ -38,7 +38,10 @@ for (const j of jobs) {
   await page.setContent(
     `<html><body style="margin:0;background:transparent">${svg(j.size, j)}</body></html>`,
   );
-  const png = await page.screenshot({ omitBackground: true, clip: { x: 0, y: 0, width: j.size, height: j.size } });
+  const png = await page.screenshot({
+    omitBackground: true,
+    clip: { x: 0, y: 0, width: j.size, height: j.size },
+  });
   writeFileSync(j.file, png);
   await page.close();
   console.log("wrote", j.file, png.length, "bytes");

@@ -72,7 +72,10 @@ export function OrdersTable({ orders, batches }: { orders: Order[]; batches?: Ba
             {orders.map((o) => (
               <tr key={o.id} className="hover:bg-subtle">
                 <td className="px-4 py-3">
-                  <Link href={`/admin/orders/${o.id}`} className="font-semibold hover:underline">
+                  <Link
+                    href={`/admin/orders/${o.id}`}
+                    className="inline-flex min-h-hit items-center font-semibold whitespace-nowrap hover:underline"
+                  >
                     {o.orderNumber}
                   </Link>
                   <p className="text-fg-muted">{formatDate(o.createdAt)}</p>

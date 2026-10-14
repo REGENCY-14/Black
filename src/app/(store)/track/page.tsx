@@ -3,12 +3,17 @@
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { Container } from "@/components/layout/Container";
+import { QueryProvider } from "@/components/providers/QueryProvider";
 import { TrackView } from "@/components/store/TrackView";
 import { Skeleton } from "@/components/ui/Skeleton";
 
 function TrackFromParams() {
   const order = useSearchParams().get("order") ?? undefined;
-  return <TrackView initialOrderNumber={order} />;
+  return (
+    <QueryProvider>
+      <TrackView initialOrderNumber={order} />
+    </QueryProvider>
+  );
 }
 
 export default function TrackPage() {

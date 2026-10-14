@@ -119,7 +119,10 @@ function BatchCard({ s }: { s: BatchSummary }) {
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h2 id={`b-${s.batch.id}`} className="text-lg font-semibold">
-            <Link href={`/admin/batches/${s.batch.id}`} className="hover:underline">
+            <Link
+              href={`/admin/batches/${s.batch.id}`}
+              className="inline-flex min-h-hit items-center hover:underline"
+            >
               {s.batch.name}
             </Link>
           </h2>

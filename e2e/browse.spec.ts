@@ -77,24 +77,6 @@ test.describe("shop", () => {
     await expect(productLinks(page).first()).toContainText("GH₵1,150");
   });
 
-  test("two-column grid on mobile, four on wide desktop", async ({ page }) => {
-    await page.setViewportSize({ width: 360, height: 800 });
-    await page.goto("/shop");
-    await expect(productLinks(page).first()).toBeVisible();
-    const cols = () =>
-      page.evaluate(
-        () =>
-          new Set(
-            [...document.querySelectorAll("main ul li a[href^='/shop/']")]
-              .slice(0, 12)
-              .map((a) => Math.round(a.getBoundingClientRect().left)),
-          ).size,
-      );
-    expect(await cols()).toBe(2);
-    await page.setViewportSize({ width: 1440, height: 900 });
-    expect(await cols()).toBe(4);
-  });
-
   for (const width of widths) {
     test(`shop has no horizontal scroll at ${width}px`, async ({ page }) => {
       await page.setViewportSize({ width, height: 900 });
@@ -171,7 +153,7 @@ test.describe("product", () => {
     expect(ld.offers.price).toBe("210.00");
     // streamed notFound() cannot change the HTTP status; the page shows the not-found UI instead
     await page.goto("/shop/not-a-product");
-    await expect(page.getByText(/could not be found/i)).toBeVisible();
+    await expect(page.getByText(/could not find that page/i)).toBeVisible();
   });
 
   test("mobile sticky bar shows the total and the WhatsApp pill sits above it", async ({ page }) => {

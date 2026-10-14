@@ -59,3 +59,15 @@
 - Markdown links go through a strict allowlist (`allowedUrl` in PolicyDocument): web, mailto, tel, in-site, in-page. `javascript:` etc. are dropped.
 - About copy is `src/config/about.ts`; delivered-order photos are `src/config/trust.ts` (drop real files in `/public/delivered`). TikTok URL in `config/brand.ts` is a PLACEHOLDER.
 - Logo: the cube mark is name-independent (`LogoMark`/`Wordmark`). To change the brand, edit `config/brand.ts`, then `public/brand/logo.svg` text, then run `node scripts/gen-icons.mjs` to regenerate the PNG icons (192, 512, maskable 512, apple-icon). `app/manifest.ts` and `app/icon.svg` are the install/favicon entry points.
+
+# Phase 8 notes (hardening)
+
+- **Tests need a production build** (`npm run build`), and run on their own port so they never touch a `next dev` on 3000: `E2E_PORT=3210 npm run e2e`. A busy port is an error on purpose (`E2E_REUSE=1` to reuse). `npm run e2e` runs the "main" project in parallel; `npm run e2e:perf` runs the throttled Core Web Vitals project alone (median of 3 cold runs), because parallel tests steal the CPU being measured. `npm run e2e:all` runs both.
+- **Do not kill all node processes** (`taskkill /IM node.exe`): it can take down the developer's own dev server. Stop servers by port.
+- Budgets: LCP < 2.5 s and CLS < 0.1 on Slow 4G + 4x CPU for home, shop, product, checkout, track; home first-load JS <= 155 KB gzipped (React + Next are ~135 KB of that). `<script nomodule>` is not counted.
+- Keep the home page's first load small: global `Providers` only has the theme and the service worker. Data fetching (`QueryProvider`) and toasts (`AppProviders`) are provided per page. Rarely used UI loads on demand through `components/layout/Lazy.tsx` (plain `import()`; `next/dynamic` adds its chunks to the first load). Do not import `Button`, `Card`, `Container` or `cn` (tailwind-merge) from always-loaded client code such as the header, footer helpers or error boundaries.
+- Error boundaries (`error.tsx`) ship with every page, so `ErrorState` uses plain markup. In this Next version the prop is `retry`, not `reset`.
+- Admin links use `prefetch={false}`: the dashboard otherwise fires a dozen route prefetches at once.
+- Service worker: `public/sw.js` (bump `VERSION` to clear caches). It never caches `/admin`, non-GET, other origins or RSC requests. It is only registered in production.
+- Install prompt: an inline script in the root layout captures `beforeinstallprompt` before React hydrates; `InstallPrompt` reads it, and `InstallCard` loads only when shown.
+- Verified-by-test facts: tap targets >= 44px and fields >= 16px on every screen at 360/390/768/1024/1440 (`e2e/responsive.spec.ts`); axe clean in light and dark.

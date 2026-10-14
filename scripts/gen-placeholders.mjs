@@ -26,10 +26,19 @@ mkdirSync("public/delivered", { recursive: true });
 const glyphs = "ABCDEFGHIJKLMNOPQRSTUVWX";
 for (let i = 1; i <= 24; i++) {
   const id = String(i).padStart(2, "0");
-  writeFileSync(`public/products/p${id}.svg`, svg(800, 1000, tints[i % tints.length], "Placeholder photo", glyphs[i - 1]));
-  writeFileSync(`public/products/p${id}-b.svg`, svg(800, 1000, tints[(i + 2) % tints.length], "Placeholder photo", glyphs[i - 1]));
+  writeFileSync(
+    `public/products/p${id}.svg`,
+    svg(800, 1000, tints[i % tints.length], "Placeholder photo", glyphs[i - 1]),
+  );
+  writeFileSync(
+    `public/products/p${id}-b.svg`,
+    svg(800, 1000, tints[(i + 2) % tints.length], "Placeholder photo", glyphs[i - 1]),
+  );
 }
 for (let i = 1; i <= 6; i++) {
-  writeFileSync(`public/delivered/d${i}.svg`, svg(800, 800, tints[i % tints.length], "Delivered order photo", String(i)));
+  writeFileSync(
+    `public/delivered/d${i}.svg`,
+    svg(800, 800, tints[i % tints.length], "Delivered order photo", String(i)),
+  );
 }
 console.log("done");

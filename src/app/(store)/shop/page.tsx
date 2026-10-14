@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { Container } from "@/components/layout/Container";
 import { ProductGridSkeleton } from "@/components/store/ProductGrid";
+import { QueryProvider } from "@/components/providers/QueryProvider";
 import { ShopView } from "@/components/store/ShopView";
 import { Skeleton } from "@/components/ui/Skeleton";
 
@@ -28,7 +29,9 @@ export default function ShopPage() {
           </div>
         }
       >
-        <ShopView />
+        <QueryProvider>
+          <ShopView />
+        </QueryProvider>
       </Suspense>
     </Container>
   );

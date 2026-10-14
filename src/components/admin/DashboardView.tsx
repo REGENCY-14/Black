@@ -24,7 +24,7 @@ export function DashboardView() {
         actions={
           owner && (
             <Button asChild>
-              <Link href="/admin/products/new">
+              <Link prefetch={false} href="/admin/products/new">
                 <Plus className="size-4" aria-hidden /> Add product
               </Link>
             </Button>
@@ -54,6 +54,7 @@ export function DashboardView() {
                 New paid orders, unpaid orders, and containers that arrived.
               </p>
               <Link
+                prefetch={false}
                 href="/admin/orders"
                 className="mt-auto inline-flex min-h-hit items-center gap-1 text-sm font-medium"
               >
@@ -73,6 +74,7 @@ export function DashboardView() {
                 {q.data.balancesOutstandingCount === 1 ? "order" : "orders"}.
               </p>
               <Link
+                prefetch={false}
                 href="/admin/orders?balance=1"
                 className="mt-auto inline-flex min-h-hit items-center gap-1 text-sm font-medium"
               >
@@ -103,6 +105,7 @@ export function DashboardView() {
                 <p className="text-fg-secondary">No container on the way.</p>
               )}
               <Link
+                prefetch={false}
                 href="/admin/batches"
                 className="mt-auto inline-flex min-h-hit items-center gap-1 text-sm font-medium"
               >
@@ -118,7 +121,11 @@ export function DashboardView() {
             <ul className="flex flex-col divide-y divide-line">
               {q.data.recentOrders.map((o) => (
                 <li key={o.id}>
-                  <Link href={`/admin/orders/${o.id}`} className="flex min-h-16 items-center gap-3 py-3">
+                  <Link
+                    prefetch={false}
+                    href={`/admin/orders/${o.id}`}
+                    className="flex min-h-16 items-center gap-3 py-3"
+                  >
                     <span
                       className="inline-flex size-10 shrink-0 items-center justify-center rounded-pill bg-subtle text-sm font-semibold"
                       aria-hidden

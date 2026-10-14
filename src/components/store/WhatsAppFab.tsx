@@ -1,5 +1,5 @@
 import { MessageCircle } from "lucide-react";
-import { FloatingPill } from "@/components/ui/Tooltip";
+import { FloatingPill } from "@/components/ui/FloatingPill";
 import { whatsappLink } from "@/config";
 
 /** Floating black pill (reference 2). Sits above any BottomBar via the --sticky-bar variable. */

@@ -1,69 +1,38 @@
 "use client";
 
-import { Menu, MessageCircle, Music2 } from "lucide-react";
-import Link from "next/link";
-import { useState } from "react";
-import { Button } from "@/components/ui/Button";
-import { Sheet } from "@/components/ui/Sheet";
-import { ThemeToggle } from "@/components/ui/ThemeToggle";
-import { brand, whatsappLink } from "@/config";
-import { mainNav } from "@/config/nav";
+import { Menu } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Lazy } from "@/components/layout/Lazy";
+
+// The dialog (and Radix with it) is not part of the first load: it arrives on first use, or a moment
+// after the page has settled, so tapping the menu button is still instant.
+const loadMenu = () => import("./MenuSheet");
 
 export function MobileNav() {
   const [open, setOpen] = useState(false);
+  const [wanted, setWanted] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => void loadMenu(), 3000); // warm the cache once the page has settled
+    return () => clearTimeout(t);
+  }, []);
+
   return (
     <div className="lg:hidden">
       <button
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          setWanted(true);
+          setOpen(true);
+        }}
+        onPointerEnter={() => void loadMenu()}
         aria-label="Open menu"
         aria-haspopup="dialog"
         className="inline-flex min-h-hit min-w-hit items-center justify-center rounded-btn border border-line bg-card text-fg transition-colors hover:bg-subtle"
       >
         <Menu className="size-5" aria-hidden />
       </button>
-      <Sheet
-        open={open}
-        onOpenChange={setOpen}
-        title="Menu"
-        footer={
-          <div className="flex items-center gap-3">
-            <Button asChild variant="whatsapp" block="always" size="lg">
-              <a href={whatsappLink()} target="_blank" rel="noopener noreferrer">
-                <MessageCircle className="size-5" aria-hidden />
-                Chat on WhatsApp
-              </a>
-            </Button>
-            <ThemeToggle />
-          </div>
-        }
-      >
-        <nav aria-label="Mobile">
-          <ul className="flex flex-col">
-            {mainNav.map((item) => (
-              <li key={item.href} className="border-b border-line last:border-0">
-                <Link
-                  href={item.href}
-                  onClick={() => setOpen(false)}
-                  className="flex min-h-14 items-center text-lg font-medium"
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-            <li className="border-b border-line last:border-0">
-              <a
-                href={brand.social.tiktok}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex min-h-14 items-center gap-2 text-lg font-medium"
-              >
-                <Music2 className="size-5" aria-hidden /> TikTok
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </Sheet>
+      <Lazy loader={loadMenu} enabled={wanted} props={{ open, onOpenChange: setOpen }} />
     </div>
   );
 }

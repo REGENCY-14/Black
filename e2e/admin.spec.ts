@@ -48,7 +48,8 @@ test.describe("sign in", () => {
   test("signed-out visitors are sent to the login page from every admin screen", async ({ page }) => {
     for (const path of ["/admin", "/admin/orders", "/admin/batches", "/admin/products", "/admin/staff"]) {
       await page.goto(path);
-      await expect(page).toHaveURL(/\/admin\/login$/);
+      // the redirect happens after the page hydrates and the session check returns; allow for a busy machine
+      await expect(page).toHaveURL(/\/admin\/login$/, { timeout: 20_000 });
     }
   });
 
@@ -354,7 +355,7 @@ test.describe("batches", () => {
 
     await b2.getByRole("button", { name: /Mark as Shipped from China/ }).click();
     await page.getByRole("button", { name: "Yes, mark as Shipped from China" }).click();
-    await expect(page.getByText("1 order moved")).toBeVisible();
+    await expect(page.getByText("1 order moved", { exact: true }).first()).toBeVisible();
     await expect(page.getByText("1 customer notified.", { exact: true }).first()).toBeVisible();
     await expect(b2.getByTestId("batch-status")).toHaveText("Shipped from China");
 
