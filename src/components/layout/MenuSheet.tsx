@@ -4,6 +4,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { MessageCircle, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { brand, contact, whatsappLink } from "@/config";
 import { mainNav } from "@/config/nav";
 
@@ -79,14 +80,17 @@ export default function MenuSheet({
                 {p.label} {p.display}
               </a>
             ))}
-            <a
-              href={whatsappLink()}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`${small} w-fit gap-2 border-b border-fg-inverse`}
-            >
-              <MessageCircle className="size-4" aria-hidden /> Chat on WhatsApp
-            </a>
+            <div className="flex items-center justify-between gap-4">
+              <a
+                href={whatsappLink()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`${small} w-fit gap-2 border-b border-fg-inverse`}
+              >
+                <MessageCircle className="size-4" aria-hidden /> Chat on WhatsApp
+              </a>
+              <ThemeToggle onDark />
+            </div>
           </div>
 
           <div className="mt-6 flex items-center justify-between gap-4 border-t border-fg-inverse/20 pt-2 text-fg-inverse/70">

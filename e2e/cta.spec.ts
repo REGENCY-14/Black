@@ -69,3 +69,13 @@ test.describe("mobile menu is a full-screen page", () => {
     await expect(dialog).toBeHidden();
   });
 });
+
+test("the mobile menu has a theme switch", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  await page.getByRole("button", { name: "Open menu" }).click();
+  const dialog = page.getByRole("dialog", { name: "Menu" });
+  await dialog.getByRole("button", { name: /switch to dark theme|switch to light theme/i }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", /dark|light/);
+  await expect(dialog).toBeVisible();
+});
