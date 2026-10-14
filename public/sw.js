@@ -9,11 +9,11 @@
  *
  * Bump VERSION to drop every old cache on the next visit.
  */
-const VERSION = "v1";
+const VERSION = "v2";
 const STATIC_CACHE = `static-${VERSION}`;
 const PAGE_CACHE = `pages-${VERSION}`;
 const MAX_PAGES = 40;
-const PRECACHE = ["/offline", "/icons/icon-192.png", "/icons/icon-512.png", "/brand/mark.svg"];
+const PRECACHE = ["/offline", "/icons/icon-192.png", "/icons/icon-512.png", "/brand/mark.png", "/brand/mark-white.png"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(

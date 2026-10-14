@@ -1,27 +1,47 @@
 import { brand } from "@/config";
 import clsx from "clsx";
 
-/** The cube mark on its own. One colour (currentColor), so it works on light, dark and teal surfaces. */
+/**
+ * The brand mark: the supplied artwork as two transparent PNGs, navy for light surfaces and white for dark
+ * ones (swapped by the `dark:` variant, so no JavaScript). Replace both files in /public/brand to rebrand;
+ * scripts/gen-logo.mjs makes them from one source image.
+ */
 export function LogoMark({ className }: { className?: string }) {
+  const size = clsx("object-contain", className ?? "size-9 md:size-11");
   return (
-    <svg viewBox="0 0 32 32" aria-hidden="true" className={className ?? "size-7"} fill="currentColor">
-      <rect width="32" height="32" rx="9" />
-      <polygon points="16,6.5 24,11 16,15.5 8,11" fill="var(--bg-page)" />
-      <polygon points="8,11 16,15.5 16,25.5 8,21" fill="var(--bg-page)" fillOpacity="0.7" />
-      <polygon points="24,11 16,15.5 16,25.5 24,21" fill="var(--bg-page)" fillOpacity="0.45" />
-    </svg>
+    <>
+      {/* eslint-disable @next/next/no-img-element */}
+      <img
+        src="/brand/mark.png"
+        alt=""
+        width={457}
+        height={465}
+        aria-hidden
+        className={clsx(size, "dark:hidden")}
+      />
+      <img
+        src="/brand/mark-white.png"
+        alt=""
+        width={457}
+        height={465}
+        aria-hidden
+        className={clsx(size, "hidden dark:block")}
+      />
+    </>
   );
 }
 
-/**
- * Mark plus the store name from config/brand.ts. The mark does not depend on the name,
- * so confirming the final name never means redrawing the logo.
- */
+/** Mark plus the store name from config/brand.ts. */
 export function Wordmark({ className }: { className?: string }) {
   return (
     <span className={clsx("inline-flex items-center gap-2 font-semibold tracking-tight", className)}>
       <LogoMark />
-      <span className="text-lg">{brand.name}</span>
+      <span className="flex flex-col leading-none">
+        <span className="text-xl font-bold">{brand.shortName}</span>
+        <span className="mt-0.5 hidden text-xs font-semibold tracking-wide uppercase md:block">
+          {brand.descriptor}
+        </span>
+      </span>
     </span>
   );
 }

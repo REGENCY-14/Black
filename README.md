@@ -62,7 +62,7 @@ docs/                  backend contract
 
 ## Changing things
 
-- **Business name, phones, email, TikTok link:** `src/config/brand.ts` and `contact.ts`. The name is still the placeholder `STORE_NAME`.
+- **Business name, phones, email, TikTok link:** `src/config/brand.ts` and `contact.ts`. The name is Deen Imports and Logistics (from the supplied logo); the TikTok URL is still a placeholder.
 - **Deposit %, balance due days, cancellation rules:** `src/config/business-rules.ts`. Nothing else hardcodes them, including the policy pages.
 - **Pickup and GhanaPost GPS:** feature flags in `src/config/features.ts`.
 - **Colours, radius, type:** `src/styles/tokens.css` only. Components use semantic Tailwind utilities (`bg-card`, `text-fg`, `rounded-btn`) and never raw values.

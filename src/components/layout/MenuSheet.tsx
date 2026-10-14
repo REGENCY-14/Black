@@ -4,6 +4,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { MessageCircle, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Wordmark } from "@/components/brand/Wordmark";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { brand, contact, whatsappLink } from "@/config";
 import { mainNav } from "@/config/nav";
@@ -27,18 +28,18 @@ export default function MenuSheet({
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Content
-          className="fixed inset-0 z-50 flex flex-col overflow-y-auto bg-inverse px-(--page-gutter) pt-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] text-fg-inverse outline-none data-[state=open]:animate-[fade-in_180ms_ease-out]"
+          className="fixed inset-0 z-50 flex flex-col overflow-y-auto bg-page px-(--page-gutter) pt-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] text-fg outline-none data-[state=open]:animate-[fade-in_180ms_ease-out]"
           aria-describedby={undefined}
         >
           <Dialog.Title className="sr-only">Menu</Dialog.Title>
 
           <div className="flex h-12 items-center justify-between">
             <Link href="/" onClick={close} className="inline-flex min-h-hit items-center">
-              <span className="text-lg font-semibold tracking-tight uppercase">{brand.name}</span>
+              <Wordmark className="uppercase" />
             </Link>
             <Dialog.Close
               aria-label="Close menu"
-              className="inline-flex size-hit items-center justify-center rounded-pill bg-fg-inverse text-inverse transition-transform active:scale-[0.96]"
+              className="inline-flex size-hit items-center justify-center rounded-pill bg-fg text-page transition-transform active:scale-[0.96]"
             >
               <X className="size-5" aria-hidden />
             </Dialog.Close>
@@ -89,11 +90,11 @@ export default function MenuSheet({
               >
                 <MessageCircle className="size-4" aria-hidden /> Chat on WhatsApp
               </a>
-              <ThemeToggle onDark />
+              <ThemeToggle />
             </div>
           </div>
 
-          <div className="mt-6 flex items-center justify-between gap-4 border-t border-fg-inverse/20 pt-2 text-fg-inverse/70">
+          <div className="mt-6 flex items-center justify-between gap-4 border-t border-line pt-2 text-fg-secondary">
             <div className="flex gap-4">
               <Link href="/policies/terms" onClick={close} className={`${small} text-xs`}>
                 Terms

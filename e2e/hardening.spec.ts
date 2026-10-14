@@ -43,7 +43,10 @@ test.describe("SEO", () => {
 
   test("pages carry social preview tags and a real Open Graph image", async ({ page, request }) => {
     await page.goto("/");
-    await expect(page.locator('meta[property="og:site_name"]')).toHaveAttribute("content", "STORE_NAME");
+    await expect(page.locator('meta[property="og:site_name"]')).toHaveAttribute(
+      "content",
+      "Deen Imports and Logistics",
+    );
     await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute("content", "summary_large_image");
     const ogImage = await page.locator('meta[property="og:image"]').getAttribute("content");
     expect(ogImage).toMatch(/^https?:\/\//); // absolute, thanks to metadataBase
@@ -54,7 +57,7 @@ test.describe("SEO", () => {
 
   test("a product page has a canonical URL and its own title", async ({ page }) => {
     await page.goto("/shop/electric-kettle-2l-glass");
-    await expect(page).toHaveTitle("Electric kettle, 2L glass | STORE_NAME");
+    await expect(page).toHaveTitle("Electric kettle, 2L glass | Deen Imports and Logistics");
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
       "href",
       /\/shop\/electric-kettle-2l-glass$/,
@@ -138,14 +141,14 @@ test.describe("PWA: installable and works offline", () => {
     expect(state).toBe("activated");
     // the page cache is created the first time a page is saved, so only the static cache exists at install
     const caches = await page.evaluate(async () => (await window.caches.keys()).sort());
-    expect(caches).toContain("static-v1");
+    expect(caches).toContain("static-v2");
   });
 
   test("the offline page and icons are saved at install time", async ({ page }) => {
     await page.goto("/");
     await swControlling(page);
     const saved = await page.evaluate(async () => {
-      const c = await window.caches.open("static-v1");
+      const c = await window.caches.open("static-v2");
       return (await c.keys()).map((r) => new URL(r.url).pathname);
     });
     expect(saved).toEqual(expect.arrayContaining(["/offline", "/icons/icon-192.png", "/icons/icon-512.png"]));
@@ -162,7 +165,7 @@ test.describe("PWA: installable and works offline", () => {
     await expect(page.getByRole("heading", { level: 1 })).toContainText("We buy from the factory");
     // let the worker finish writing the copy
     await page.waitForFunction(async () => {
-      const c = await window.caches.open("pages-v1");
+      const c = await window.caches.open("pages-v2");
       return !!(await c.match("/about"));
     });
 
@@ -198,7 +201,7 @@ test.describe("PWA: installable and works offline", () => {
     await page.getByLabel("Phone number or email").fill("0241234567");
     await page.getByRole("button", { name: "Track order" }).click();
     await expect(page.getByTestId("tracked-order-number")).toBeVisible();
-    await page.waitForFunction(async () => !!(await (await window.caches.open("pages-v1")).match("/track")));
+    await page.waitForFunction(async () => !!(await (await window.caches.open("pages-v2")).match("/track")));
     await page.getByRole("button", { name: "Track a different order" }).click();
 
     await context.setOffline(true);

@@ -6,7 +6,7 @@ import { useSyncExternalStore } from "react";
 
 const subscribe = () => () => {};
 
-export function ThemeToggle({ onDark = false }: { onDark?: boolean }) {
+export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
   const mounted = useSyncExternalStore(
     subscribe,
@@ -19,11 +19,7 @@ export function ThemeToggle({ onDark = false }: { onDark?: boolean }) {
       type="button"
       onClick={() => setTheme(dark ? "light" : "dark")}
       aria-label={dark ? "Switch to light theme" : "Switch to dark theme"}
-      className={
-        onDark
-          ? "inline-flex min-h-hit min-w-hit items-center justify-center rounded-btn border border-fg-inverse/30 text-fg-inverse"
-          : "inline-flex min-h-hit min-w-hit items-center justify-center rounded-btn border border-line bg-card text-fg"
-      }
+      className="inline-flex min-h-hit min-w-hit items-center justify-center rounded-btn border border-line bg-card text-fg"
     >
       {dark ? <Sun className="size-5" aria-hidden /> : <Moon className="size-5" aria-hidden />}
     </button>

@@ -58,7 +58,7 @@
 - Policies live in `content/policies/*.md` (frontmatter + markdown). Numbers and contact lines are `{{placeholders}}` filled from `/src/config` by `lib/policies.ts`; never type 70% or 14 days into the markdown (a unit test enforces it). Every draft must keep `status: draft` and a "To confirm with the owner" note for each undecided point. Set `status: final` to remove the banner and allow indexing.
 - Markdown links go through a strict allowlist (`allowedUrl` in PolicyDocument): web, mailto, tel, in-site, in-page. `javascript:` etc. are dropped.
 - About copy is `src/config/about.ts`; delivered-order photos are `src/config/trust.ts` (drop real files in `/public/delivered`). TikTok URL in `config/brand.ts` is a PLACEHOLDER.
-- Logo: the cube mark is name-independent (`LogoMark`/`Wordmark`). To change the brand, edit `config/brand.ts`, then `public/brand/logo.svg` text, then run `node scripts/gen-icons.mjs` to regenerate the PNG icons (192, 512, maskable 512, apple-icon). `app/manifest.ts` and `app/icon.svg` are the install/favicon entry points.
+- Logo: the cube mark is name-independent (`LogoMark`/`Wordmark`). To change the brand, edit `config/brand.ts`, then `public/brand/logo.svg` text, then run `node scripts/gen-logo.mjs <image>` (transparent marks in public/brand) then `node scripts/gen-icons.mjs` (PNG icons). `app/manifest.ts` and `app/icon.svg` are the install/favicon entry points.
 
 # Phase 8 notes (hardening)
 

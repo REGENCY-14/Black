@@ -5,7 +5,7 @@ import { brand } from "@/config";
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: brand.name,
-    short_name: brand.name.length > 12 ? brand.name.slice(0, 12) : brand.name,
+    short_name: brand.shortName,
     description: brand.description,
     start_url: "/",
     scope: "/",

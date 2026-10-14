@@ -171,7 +171,7 @@ test.describe("brand and PWA assets", () => {
     const res = await request.get("/manifest.webmanifest");
     expect(res.status()).toBe(200);
     const m = await res.json();
-    expect(m.name).toBe("STORE_NAME");
+    expect(m.name).toBe("Deen Imports and Logistics");
     expect(m.display).toBe("standalone");
     expect(m.start_url).toBe("/");
     expect(m.theme_color).toMatch(/^#[0-9a-f]{6}$/i);
@@ -203,10 +203,10 @@ test.describe("brand and PWA assets", () => {
   });
 
   test("the logo files are served", async ({ request }) => {
-    for (const f of ["/brand/logo.svg", "/brand/mark.svg", "/icon.svg"]) {
+    for (const f of ["/brand/mark.png", "/brand/mark-white.png", "/icon.png"]) {
       const res = await request.get(f);
       expect(res.status(), f).toBe(200);
-      expect(res.headers()["content-type"]).toContain("svg");
+      expect(res.headers()["content-type"]).toContain("png");
     }
   });
 });
