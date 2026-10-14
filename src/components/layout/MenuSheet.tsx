@@ -1,14 +1,18 @@
 "use client";
 
-import { MessageCircle, Music2 } from "lucide-react";
+import * as Dialog from "@radix-ui/react-dialog";
+import { MessageCircle, X } from "lucide-react";
 import Link from "next/link";
-import { Button } from "@/components/ui/Button";
-import { Sheet } from "@/components/ui/Sheet";
-import { ThemeToggle } from "@/components/ui/ThemeToggle";
-import { brand, whatsappLink } from "@/config";
+import { usePathname } from "next/navigation";
+import { brand, contact, whatsappLink } from "@/config";
 import { mainNav } from "@/config/nav";
 
-/** The mobile menu dialog. Loaded on demand (see MobileNav) because it pulls in Radix Dialog. */
+const small = "inline-flex min-h-hit items-center text-sm uppercase tracking-wide";
+
+/**
+ * The mobile menu: a full-screen dark page (not a sheet) with large links, the contact lines and the
+ * legal row at the bottom. Loaded on demand (see MobileNav) because it pulls in Radix Dialog.
+ */
 export default function MenuSheet({
   open,
   onOpenChange,
@@ -16,48 +20,90 @@ export default function MenuSheet({
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
+  const pathname = usePathname();
+  const close = () => onOpenChange(false);
   return (
-    <Sheet
-      open={open}
-      onOpenChange={onOpenChange}
-      title="Menu"
-      footer={
-        <div className="flex items-center gap-3">
-          <Button asChild variant="whatsapp" block="always" size="lg">
-            <a href={whatsappLink()} target="_blank" rel="noopener noreferrer">
-              <MessageCircle className="size-5" aria-hidden />
-              Chat on WhatsApp
-            </a>
-          </Button>
-          <ThemeToggle />
-        </div>
-      }
-    >
-      <nav aria-label="Mobile">
-        <ul className="flex flex-col">
-          {mainNav.map((item) => (
-            <li key={item.href} className="border-b border-line last:border-0">
-              <Link
-                href={item.href}
-                onClick={() => onOpenChange(false)}
-                className="flex min-h-14 items-center text-lg font-medium"
-              >
-                {item.label}
-              </Link>
-            </li>
-          ))}
-          <li className="border-b border-line last:border-0">
+    <Dialog.Root open={open} onOpenChange={onOpenChange}>
+      <Dialog.Portal>
+        <Dialog.Content
+          className="fixed inset-0 z-50 flex flex-col overflow-y-auto bg-inverse px-(--page-gutter) pt-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] text-fg-inverse outline-none data-[state=open]:animate-[fade-in_180ms_ease-out]"
+          aria-describedby={undefined}
+        >
+          <Dialog.Title className="sr-only">Menu</Dialog.Title>
+
+          <div className="flex h-12 items-center justify-between">
+            <Link href="/" onClick={close} className="inline-flex min-h-hit items-center">
+              <span className="text-lg font-semibold tracking-tight uppercase">{brand.name}</span>
+            </Link>
+            <Dialog.Close
+              aria-label="Close menu"
+              className="inline-flex size-hit items-center justify-center rounded-pill bg-fg-inverse text-inverse transition-transform active:scale-[0.96]"
+            >
+              <X className="size-5" aria-hidden />
+            </Dialog.Close>
+          </div>
+
+          <nav aria-label="Mobile" className="mt-12">
+            <ul className="flex flex-col">
+              {mainNav.map((item) => {
+                const active = !item.href.includes("#") && pathname.startsWith(item.href);
+                return (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      onClick={close}
+                      aria-current={active ? "page" : undefined}
+                      className="flex min-h-16 items-center text-3xl tracking-tight aria-[current=page]:underline aria-[current=page]:underline-offset-8"
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                );
+              })}
+              <li>
+                <a
+                  href={brand.social.tiktok}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex min-h-16 items-center text-3xl tracking-tight"
+                >
+                  TikTok
+                </a>
+              </li>
+            </ul>
+          </nav>
+
+          <div className="mt-auto flex flex-col gap-1 pt-12">
+            {contact.phones.map((p) => (
+              <a key={p.e164} href={`tel:${p.e164}`} className={small}>
+                {p.label} {p.display}
+              </a>
+            ))}
             <a
-              href={brand.social.tiktok}
+              href={whatsappLink()}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex min-h-14 items-center gap-2 text-lg font-medium"
+              className={`${small} w-fit gap-2 border-b border-fg-inverse`}
             >
-              <Music2 className="size-5" aria-hidden /> TikTok
+              <MessageCircle className="size-4" aria-hidden /> Chat on WhatsApp
             </a>
-          </li>
-        </ul>
-      </nav>
-    </Sheet>
+          </div>
+
+          <div className="mt-6 flex items-center justify-between gap-4 border-t border-fg-inverse/20 pt-2 text-fg-inverse/70">
+            <div className="flex gap-4">
+              <Link href="/policies/terms" onClick={close} className={`${small} text-xs`}>
+                Terms
+              </Link>
+              <Link href="/policies/privacy" onClick={close} className={`${small} text-xs`}>
+                Privacy
+              </Link>
+            </div>
+            <p className="text-xs uppercase">
+              &copy; {new Date().getFullYear()} {brand.name}
+            </p>
+          </div>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 }

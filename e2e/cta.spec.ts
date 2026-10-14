@@ -44,3 +44,28 @@ test("buttons have 16px corners on mobile", async ({ page }) => {
   expect(await radius(page.getByRole("link", { name: "Browse preorders" }).first())).toBe("16px");
   expect(await radius(page.getByRole("link", { name: "Chat on WhatsApp" }))).toBe("16px");
 });
+
+test.describe("mobile menu is a full-screen page", () => {
+  test.use({ viewport: { width: 390, height: 844 } });
+
+  test("covers the whole screen, lists big links, closes with the circle button and on navigate", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: "Open menu" }).click();
+    const dialog = page.getByRole("dialog", { name: "Menu" });
+    await expect(dialog).toBeVisible();
+    const box = await dialog.boundingBox();
+    expect(box).toMatchObject({ x: 0, y: 0, width: 390, height: 844 });
+    await expect(dialog.getByRole("link", { name: "Track order" })).toBeVisible();
+    await expect(dialog.getByRole("link", { name: "Terms" })).toBeVisible();
+
+    await dialog.getByRole("button", { name: "Close menu" }).click();
+    await expect(dialog).toBeHidden();
+
+    await page.getByRole("button", { name: "Open menu" }).click();
+    await dialog.getByRole("link", { name: "Track order" }).click();
+    await expect(page).toHaveURL(/\/track$/);
+    await expect(dialog).toBeHidden();
+  });
+});
