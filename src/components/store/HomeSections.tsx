@@ -29,12 +29,18 @@ export function HeroCard() {
   return (
     <Card size="lg" as="section" className="flex h-full flex-col gap-5" aria-labelledby="hero-title">
       <CardMedia ratio="aspect-[16/10]" className="bg-hero">
-        <SmartImage
-          src={images.hero}
-          alt="A container ship carrying goods from China at dusk"
+        {/* plain <img>: the two pre-sized files let a phone download ~30 KB instead of ~90 KB (LCP) */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={images.hero.replace(".jpg", "-1200.jpg")}
+          srcSet={`${images.hero.replace(".jpg", "-640.jpg")} 640w, ${images.hero.replace(".jpg", "-1200.jpg")} 1200w`}
           sizes="(min-width: 1024px) 60vw, 100vw"
-          priority
-          unoptimized
+          width={1200}
+          height={750}
+          alt="A container ship carrying goods from China at dusk"
+          fetchPriority="high"
+          decoding="async"
+          className="absolute inset-0 size-full object-cover"
         />
       </CardMedia>
       <div className="flex flex-1 flex-col gap-5 px-1 pb-1 md:px-2">
